@@ -101,8 +101,7 @@ const GamePanel = (props: PanelProps) => {
 
         {props.canUpgrade ? (
           <div
-            className="GamePanel-button"
-            style={{ backgroundColor: "black" }}
+            className="GamePanel-button UpgradeButton"
             onClick={props.onUpgrade}
           >
             <div className="GamePanel-button-inner noNudge">
@@ -140,7 +139,7 @@ class App extends React.Component<{}, AppState> {
       this.state = locallySavedState;
     } else {
       this.state = {
-        stonesFreed: 0,
+        stonesFreed: 100 ** 8,
         toolCount: 1,
         toolLevel: 0,
         liberatorLevel: 0,

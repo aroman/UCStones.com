@@ -11,7 +11,6 @@
 }
 
 body {
-  font-family: "Comic Sans MS";
   background: linear-gradient(
     124deg,
     #ff2400,
@@ -29,6 +28,7 @@ body {
 }
 
 .App {
+  font-family: "Comic Sans MS";
   margin: 0;
   padding: 0;
   display: flex;
@@ -105,22 +105,27 @@ body {
 
 .GamePanel-header-title {
   display: inline-block;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.7);
+  font-size: 16px;
   font-weight: bold;
   margin-right: 5px;
   padding: 3px;
   margin: -3px;
   margin-right: 3px;
   border-radius: 3px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .GamePanel-header-stats {
   display: inline-block;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.7);
   font-size: 16px;
   padding: 3px;
   margin: -3px;
   border-radius: 3px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .GamePanel-button {
@@ -137,7 +142,7 @@ body {
 }
 
 .GamePanel-button-disabled {
-  opacity: 0.7;
+  background-color: gray !important;
 }
 
 .GamePanel-button-disabled:hover {
@@ -145,15 +150,10 @@ body {
 }
 
 .GamePanel-button-disabled:active {
-  opacity: 0.7 !important;
 }
 
 .GamePanel-button:hover {
   cursor: pointer;
-}
-
-.GamePanel-button:active {
-  opacity: 0.9;
 }
 
 .GamePanel-button-inner {
@@ -177,11 +177,15 @@ body {
 .GamePanel-button-subtitle {
   margin-bottom: -27px;
   font-size: 12px;
-  margin-top: -5px;
+  margin-top: -3px;
   padding-top: 5px;
   padding-bottom: 5px;
-  background-color: rgba(0, 0, 0, 1);
+  background-color: rgba(0, 0, 0, 0.7);
   align-self: center;
+  margin-right: 3px;
+  border-radius: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .GameScore {
@@ -191,7 +195,7 @@ body {
   padding-right: 20px;
   padding-bottom: 10px;
   padding-top: 8px;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
   margin-bottom: 25px;
   display: flex;
@@ -203,7 +207,7 @@ body {
   font-family: "Hack";
   font-weight: normal;
   margin-left: 10px;
-  font-size: 26px;
+  font-size: 22px;
   margin-top: 2px;
 }
 
@@ -338,9 +342,6 @@ body {
   pointer-events: none;
 }
 
-.Background-Tool-0 {
-  background-image: url("cursors/plastic-knife.png");
-}
 
 .Background-Tool-0 {
   background-image: url("cursors/plastic-knife.png");
@@ -386,6 +387,55 @@ body {
   background-image: url("cursors/subronium.png");
 }
 
+.Background-Liberator-0 {
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url("backgrounds/112.png");
+  background-size: 100%;
+}
+
+.Background-Liberator-1 {
+}
+
+.Background-Liberator-2 {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("backgrounds/uc-stoner.jpeg");
+  background-size: 100%;
+  background-position-y: -125px;
+  /* background-image: url("backgrounds/safety-scissors.png"); */
+}
+
+.Background-Liberator-3 {
+  /* background-image: url("backgrounds/lawn-mower.png"); */
+}
+
+.Background-Liberator-4 {
+  /* background-image: url("backgrounds/magnet.png"); */
+}
+
+.Background-Liberator-5 {
+  /* background-image: url("backgrounds/safety-scissors.png"); */
+}
+
+.Background-Liberator-6 {
+  /* background-image: url("backgrounds/axe.png"); */
+}
+
+.Background-Liberator-7 {
+  /* background-image: url("backgrounds/wire-cutters.png"); */
+}
+
+.Background-Liberator-8 {
+  /* background-image: url("backgrounds/lightsaber.png"); */
+}
+
+.Background-Liberator-9 {
+  /* background-image: url("backgrounds/brain.png"); */
+}
+
+.Background-Liberator-10 {
+  /* background-image: url("backgrounds/subronium.png"); */
+}
+
 .Cursor-0 {
   cursor: url("cursors/plastic-knife.png"), pointer;
 }
@@ -428,4 +478,14 @@ body {
 
 .Cursor-10 {
   cursor: url("cursors/subronium.png"), pointer;
+}
+
+.UpgradeButton {
+  color: black;
+  background: rgb(62, 222, 76);
+  background: linear-gradient(
+    90deg,
+    rgba(62, 222, 76, 1) 0%,
+    rgba(255, 254, 0, 1) 100%
+  );
 }
