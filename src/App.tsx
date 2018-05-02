@@ -131,6 +131,7 @@ class App extends React.Component<{}, AppState> {
     this.buyLiberator = this.buyLiberator.bind(this);
     this.upgradeLiberator = this.upgradeLiberator.bind(this);
     this.upgradeTool = this.upgradeTool.bind(this);
+    this.resetState = this.resetState.bind(this);
     setInterval(this.onLiberate.bind(this), 100);
     setInterval(this.saveStateToLocalStorage.bind(this), 1000);
 
@@ -138,14 +139,18 @@ class App extends React.Component<{}, AppState> {
     if (locallySavedState) {
       this.state = locallySavedState;
     } else {
-      this.state = {
-        stonesFreed: 100 ** 8,
-        toolCount: 1,
-        toolLevel: 0,
-        liberatorLevel: 0,
-        liberatorCount: 0
-      };
+      this.state = this.getInitialState();
     }
+  }
+
+  public getInitialState(): AppState {
+    return {
+      stonesFreed: 0,
+      toolCount: 1,
+      toolLevel: 0,
+      liberatorLevel: 0,
+      liberatorCount: 0
+    };
   }
 
   public getLocallySavedState(): AppState | null {
@@ -209,6 +214,12 @@ class App extends React.Component<{}, AppState> {
     return toolRate(this.state.toolLevel);
   }
 
+  public resetState() {
+    if (confirm("really reset all progress?")) {
+      this.setState(this.getInitialState());
+    }
+  }
+
   public onLiberate() {
     const amount = this.liberatorRate * this.state.liberatorCount;
     this.setStonesFreed(this.state.stonesFreed + amount / 10);
@@ -267,7 +278,7 @@ class App extends React.Component<{}, AppState> {
         </div> */}
 
         <div className="Game">
-          <div className="GameScore">
+          <div className="GameScore" onClick={this.resetState}>
             stones freed:<div className="GameScore-value">
               {numberWithCommas(Math.round(this.state.stonesFreed))}
             </div>
