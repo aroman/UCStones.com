@@ -1,0 +1,244 @@
+body {
+  background-color: #4e92e0;
+}
+
+.App {
+  font-family: "Comic Sans MS";
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  font-size: 18px;
+}
+
+.Banner {
+  background-image: url("./uc.png");
+  background-size: contain;
+  width: 100vw;
+  padding: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.BannerCard {
+  background-color: rgba(74, 144, 226, 0.85);
+  border: 2px solid white;
+  border-radius: 15px;
+  width: 400px;
+  padding: 20px;
+}
+
+.Game {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.GamePanel {
+  /* height:75px; */
+  background-color: black;
+  padding: 20px;
+  width: 400px;
+  border-radius: 10px;
+  border: 2px solid white;
+  padding-top: 20px;
+  padding-bottom: 35px;
+  background-image: url("112.png");
+  background-size: cover;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  /* backdrop-filter: blur(5px); */
+}
+
+.GamePanel-inner {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.GamePanel-header {
+  display: flex;
+  align-items: center;
+}
+
+.GamePanel-header-title {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.GamePanel-header-stats {
+  font-size: 16px;
+}
+
+.GamePanel-button {
+  margin-top: 10px;
+  border-radius: 5px;
+  border: 1px solid white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  user-select: none;
+  margin-right: 15px;
+  font-size: 16px;
+}
+
+.GamePanel-button-inner:hover {
+  cursor: pointer;
+}
+
+.GamePanel-button:active {
+  opacity: 0.9;
+}
+
+.GamePanel-button-inner {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 16px;
+}
+
+.noNudge {
+  padding-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.GamePanel-button-icon {
+  margin-right: 7px;
+  height: 20px;
+}
+
+.GamePanel-button-subtitle {
+  margin-bottom: -22px;
+  font-size: 12px;
+  align-self: center;
+}
+
+.GameScore {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.GameScore-value {
+  font-family: "Hack";
+  font-weight: normal;
+  margin-left: 10px;
+  font-size: 20px;
+  margin-top: 2px;
+}
+
+.BannerCard-instructions {
+  line-height: 30px;
+}
+
+.BannerCard-title {
+  font-size: 24px;
+  display: flex;
+  font-weight: bold;
+  justify-content: space-between;
+}
+
+.BannerCard-title img {
+  height: 40px;
+}
+
+.Leaderboard {
+  background-image: url("./subra.png");
+  background-size: cover;
+  /* background-repeat: no-repeat; */
+  width: 100%;
+  padding: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.LeaderboardCard-title {
+  display: flex;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.LeaderboardCard-title img {
+  margin-right: 15px;
+  /* height: 24px; */
+}
+
+.LeaderboardCard {
+  padding: 20px;
+  background-color: rgba(38, 38, 38, 0.8);
+  border-radius: 15px;
+  border: 2px solid rgb(127, 127, 127);
+  width: 400px;
+}
+
+.LeaderboardCard-list {
+  line-height: 30px;
+}
+
+.Garden {
+  display: flex;
+  flex-direction: column;
+  /* width: 400px;
+  height: 400px; */
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.Garden-logo {
+  width: 350px;
+  height: 350px;
+  margin-bottom: -375px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  transform: rotate(-45deg);
+  margin-left: 25px;
+  user-select: none;
+}
+
+.Garden-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Stone {
+  margin: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  width: 65px;
+  height: 65px;
+}
+
+.StoneJailed {
+  background-image: url("stone.png");
+  background-color: none;
+  background-size: cover;
+}
+
+.StoneFree {
+  background-image: url("stone-free.png");
+  background-color: none;
+  background-size: cover;
+}
+
+.Leaderboard-ScoreDivider {
+  font-size: 30px;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+
+.Leaderboard-You {
+  color: yellow;
+}
