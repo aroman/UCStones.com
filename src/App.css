@@ -16,35 +16,54 @@ body {
 
 .Banner {
   background-image: url("./uc.png");
-  background-size: contain;
+  background-size: cover;
   width: 100vw;
-  padding: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .BannerCard {
-  background-color: rgba(74, 144, 226, 0.85);
-  border: 2px solid white;
-  border-radius: 15px;
-  width: 400px;
-  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* border: 2px solid white; */
+  /* border-radius: 15px; */
+  width: 100%;
+  /* padding: 20px; */
+  padding: 50px;
 }
 
 .Game {
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
   margin-top: 20px;
+  width: 80vw;
+}
+
+.GamePanels {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+@media only screen and (min-width: 600px) {
+  .GamePanels {
+    flex-direction: row;
+  }
+  .GamePanel {
+    width: 25vw !important;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 }
 
 .GamePanel {
   /* height:75px; */
   background-color: black;
   padding: 20px;
-  width: 400px;
+  width: 85vw;
   border-radius: 10px;
   border: 2px solid white;
   padding-top: 20px;
@@ -52,7 +71,8 @@ body {
   background-image: url("112.png");
   background-size: cover;
   margin-bottom: 10px;
-  margin-top: 5px;
+  /* margin: 15px; */
+  /* width: 25vw; */
   /* backdrop-filter: blur(5px); */
 }
 
@@ -63,7 +83,8 @@ body {
 
 .GamePanel-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  flex-direction: column;
 }
 
 .GamePanel-header-title {
@@ -88,7 +109,19 @@ body {
   font-size: 16px;
 }
 
-.GamePanel-button-inner:hover {
+.GamePanel-button-disabled {
+  opacity: 0.7;
+}
+
+.GamePanel-button-disabled:hover {
+  cursor: not-allowed !important;
+}
+
+.GamePanel-button-disabled:active {
+  opacity: 0.7 !important;
+}
+
+.GamePanel-button:hover {
   cursor: pointer;
 }
 
@@ -154,10 +187,11 @@ body {
 
 .Leaderboard {
   background-image: url("./subra.png");
+  background-position-y: -25vh;
   background-size: cover;
   /* background-repeat: no-repeat; */
   width: 100%;
-  padding: 50px;
+  /* padding: 50px; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -177,22 +211,25 @@ body {
 .LeaderboardCard {
   padding: 20px;
   background-color: rgba(38, 38, 38, 0.8);
-  border-radius: 15px;
-  border: 2px solid rgb(127, 127, 127);
-  width: 400px;
+  /* border-radius: 15px; */
+  /* border: 2px solid rgb(127, 127, 127); */
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .LeaderboardCard-list {
   line-height: 30px;
+  width: 80vw;
 }
 
 .Garden {
   display: flex;
   flex-direction: column;
-  /* width: 400px;
-  height: 400px; */
-  margin-top: 50px;
-  margin-bottom: 50px;
+  /* margin-top: 50px; */
+  /* margin-bottom: 50px; */
 }
 
 .Garden-logo {
@@ -206,6 +243,7 @@ body {
   transform: rotate(-45deg);
   margin-left: 25px;
   user-select: none;
+  z-index: -100;
 }
 
 .Garden-row {
@@ -214,11 +252,11 @@ body {
 }
 
 .Stone {
-  margin: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
+  /* background-color: rgba(0, 0, 0, 0.5); */
   border-radius: 10px;
-  width: 65px;
-  height: 65px;
+  margin: 2vw;
+  width: 15vw;
+  height: 15vw;
 }
 
 .StoneJailed {
@@ -227,7 +265,17 @@ body {
   background-size: cover;
 }
 
+.StoneJailed:hover {
+  cursor: pointer;
+}
+
+.StoneJailed:active {
+  transform: scale(0.9);
+  transition: all 25ms ease-in-out;
+}
+
 .StoneFree {
+  z-index: 100;
   background-image: url("stone-free.png");
   background-color: none;
   background-size: cover;
