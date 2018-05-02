@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+// import * as _ from "lodash";
 import * as React from "react";
 import "./App.css";
 
@@ -11,42 +11,17 @@ import {
   liberatorNames
 } from "./GameMechanics";
 
-import Logo from "./logo.png";
+// import Logo from "./logo.png";
 import Plus from "./plus.svg";
 import Trophy from "./trophy.svg";
 import Upgrade from "./upgrade.svg";
-
-enum StoneStatus {
-  Free,
-  Jailed,
-  Missing
-}
 
 const numberWithCommas = (x: number) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-const GARDEN_SIZE = 5;
-const NUM_STONES = GARDEN_SIZE * 2 + (GARDEN_SIZE - 2) * GARDEN_SIZE;
-const garden = _.times(NUM_STONES).map(i => {
-  // const R = Math.random();
-  return StoneStatus.Jailed;
-  // if (R > 0.66) {
-  //   return StoneStatus.Free;
-  // }
-  // if (R > 0.33) {
-  // }
-  // return StoneStatus.Missing;
-});
-
-const Stone = (props: { status: StoneStatus; onFree: () => void }) => {
-  if (props.status === StoneStatus.Free) {
-    return <div className="Stone StoneFree" />;
-  } else if (props.status === StoneStatus.Jailed) {
-    return <div className="Stone StoneJailed" onClick={props.onFree} />;
-  } else {
-    return <div className="Stone" />;
-  }
+const Stone = (props: { onFree: () => void }) => {
+  return <div className="Stone" onClick={props.onFree} />;
 };
 
 const topScorers = [
@@ -90,7 +65,7 @@ const GamePanel = (props: PanelProps) => {
   return (
     <div className="GamePanel">
       <div className="GamePanel-header">
-        <div className="GamePanel-header-title">{props.title}</div>
+        <div className="GamePanel-header-title">{props.title}: </div>
         <div className="GamePanel-header-stats">
           {numberWithCommas(props.rate)} {props.unit}
         </div>
@@ -159,6 +134,23 @@ class App extends React.Component<{}, AppState> {
     setInterval(this.onLiberate.bind(this), 100);
   }
 
+  componentDidMount() {
+    (window.document.querySelector(".Stone")! as HTMLElement).onclick = e => {
+      // tslint ignore:line
+      const emoji = document.createElement("div");
+      // const stone = document.querySelector("Stone") as HTMLElement;
+      emoji.classList.add("Emoji");
+      emoji.style.left = `${e.clientX}px`;
+      emoji.style.top = `${e.clientY}px`;
+      document.body.appendChild(emoji);
+      emoji.innerText = `+${this.toolRate * this.state.toolCount}`;
+      emoji.addEventListener("animationend", () => {
+        document.body.removeChild(emoji);
+      });
+      return true;
+    };
+  }
+
   get toolCost() {
     return toolCost(this.state.toolLevel);
   }
@@ -219,19 +211,15 @@ class App extends React.Component<{}, AppState> {
   public render() {
     return (
       <div className="App">
-        <div className="Banner">
+        {/* <div className="Banner">
           <div className="BannerCard">
-            <div className="BannerCard-title">
-              <div>UCStones.com</div>
-              <img src={Logo} />
-            </div>
             <div className="BannerCard-instructions">
               <div>1. Tap a UC Stone to free it</div>
               <div>2. Buy tools and hire liberators</div>
               <div>3. FREE ALL THE STONES!!!</div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="Game">
           <div className="GameScore">
@@ -239,58 +227,42 @@ class App extends React.Component<{}, AppState> {
               {numberWithCommas(Math.round(this.state.stonesFreed))}
             </div>
           </div>
+          <Stone onFree={this.onFree} />
+        </div>
 
-          <div className="GamePanels">
-            <GamePanel
-              title="Tools"
-              unit="stones/tap"
-              rate={this.toolRate}
-              canBuy={this.state.stonesFreed >= this.toolCost}
-              quantity={this.state.toolCount}
-              cost={this.toolCost}
-              label={toolNames[this.state.toolLevel]}
-              buttonColor="#8D19C6"
-              onBuy={this.buyTool}
-              canUpgrade={
-                this.state.stonesFreed >= toolCost(this.state.toolLevel + 1)
-              }
-              onUpgrade={this.upgradeTool}
-            />
+        <div className="GamePanels">
+          <GamePanel
+            title="Tools"
+            unit="stones/tap"
+            rate={this.toolRate * this.state.toolCount}
+            canBuy={this.state.stonesFreed >= this.toolCost}
+            quantity={this.state.toolCount}
+            cost={this.toolCost}
+            label={toolNames[this.state.toolLevel]}
+            buttonColor="#8D19C6"
+            onBuy={this.buyTool}
+            canUpgrade={
+              this.state.stonesFreed >= toolCost(this.state.toolLevel + 1)
+            }
+            onUpgrade={this.upgradeTool}
+          />
 
-            <GamePanel
-              title="Liberators"
-              unit="stones/sec"
-              rate={this.liberatorRate * this.state.liberatorCount}
-              canBuy={this.state.stonesFreed >= this.liberatorCost}
-              quantity={this.state.liberatorCount}
-              cost={this.liberatorCost}
-              label={liberatorNames[this.state.liberatorLevel]}
-              buttonColor="#d8720f"
-              onBuy={this.buyLiberator}
-              canUpgrade={
-                this.state.stonesFreed >=
-                liberatorCost(this.state.liberatorLevel + 1)
-              }
-              onUpgrade={this.upgradeLiberator}
-            />
-          </div>
-
-          <div className="Garden">
-            {/* <div className="Garden-logo">UC Stones.com</div> */}
-            {_.times(GARDEN_SIZE).map(i => (
-              <div className="Garden-row">
-                {_.times(i % (GARDEN_SIZE - 1) === 0 ? GARDEN_SIZE : 2).map(
-                  j => (
-                    <Stone
-                      onFree={this.onFree}
-                      key={`${i}-${j}}`}
-                      status={garden[i * j]}
-                    />
-                  )
-                )}
-              </div>
-            ))}
-          </div>
+          <GamePanel
+            title="Liberators"
+            unit="stones/sec"
+            rate={this.liberatorRate * this.state.liberatorCount}
+            canBuy={this.state.stonesFreed >= this.liberatorCost}
+            quantity={this.state.liberatorCount}
+            cost={this.liberatorCost}
+            label={liberatorNames[this.state.liberatorLevel]}
+            buttonColor="#d8720f"
+            onBuy={this.buyLiberator}
+            canUpgrade={
+              this.state.stonesFreed >=
+              liberatorCost(this.state.liberatorLevel + 1)
+            }
+            onUpgrade={this.upgradeLiberator}
+          />
         </div>
 
         <div className="Leaderboard">

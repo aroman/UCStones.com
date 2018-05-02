@@ -1,9 +1,9 @@
 body {
   background-color: #4e92e0;
+  font-family: "Comic Sans MS";
 }
 
 .App {
-  font-family: "Comic Sans MS";
   margin: 0;
   padding: 0;
   display: flex;
@@ -15,8 +15,8 @@ body {
 }
 
 .Banner {
-  background-image: url("./uc.png");
-  background-size: cover;
+  /* background-image: url("./uc.png");
+  background-size: cover; */
   width: 100vw;
   display: flex;
   align-items: center;
@@ -46,28 +46,35 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  user-select: none;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 750px) {
   .GamePanels {
     flex-direction: row;
   }
   .GamePanel {
-    width: 25vw !important;
+    width: 40vw !important;
     margin-left: 10px;
     margin-right: 10px;
   }
 }
 
+/* @media only screen and (min-width: 1000px) {
+  .GamePanel {
+    width: 30vw !important;
+  }
+} */
+
 .GamePanel {
   /* height:75px; */
   background-color: black;
-  padding: 20px;
+  padding: 15px;
   width: 85vw;
   border-radius: 10px;
   border: 2px solid white;
-  padding-top: 20px;
-  padding-bottom: 35px;
+  padding-top: 10px;
+  padding-bottom: 30px;
   background-image: url("112.png");
   background-size: cover;
   margin-bottom: 10px;
@@ -83,8 +90,8 @@ body {
 
 .GamePanel-header {
   display: flex;
-  align-items: flex-start;
-  flex-direction: column;
+  align-items: center;
+  /* flex-direction: column; */
 }
 
 .GamePanel-header-title {
@@ -154,9 +161,9 @@ body {
 }
 
 .GameScore {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -166,7 +173,7 @@ body {
   font-family: "Hack";
   font-weight: normal;
   margin-left: 10px;
-  font-size: 20px;
+  font-size: 26px;
   margin-top: 2px;
 }
 
@@ -193,6 +200,7 @@ body {
   width: 100%;
   /* padding: 50px; */
   display: flex;
+  margin-top: 15px;
   align-items: center;
   justify-content: center;
 }
@@ -233,17 +241,8 @@ body {
 }
 
 .Garden-logo {
-  width: 350px;
-  height: 350px;
-  margin-bottom: -375px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-  transform: rotate(-45deg);
-  margin-left: 25px;
-  user-select: none;
-  z-index: -100;
+  position: absolute;
+  top: 10vh;
 }
 
 .Garden-row {
@@ -251,27 +250,37 @@ body {
   justify-content: space-between;
 }
 
+@keyframes pulsate {
+  from {
+    box-shadow: 0 0 25px 3px white;
+  }
+  to {
+    box-shadow: 0 0 3px 3px white;
+  }
+}
+
 .Stone {
   /* background-color: rgba(0, 0, 0, 0.5); */
   border-radius: 10px;
-  margin: 2vw;
-  width: 15vw;
-  height: 15vw;
-}
-
-.StoneJailed {
+  width: 250px;
+  height: 250px;
+  margin-bottom: 25px;
+  border: 10px solid black;
+  box-shadow: 0 0 10px 3px white;
   background-image: url("stone.png");
-  background-color: none;
   background-size: cover;
+  animation: pulsate 1s ease-in-out infinite alternate;
+  cursor: url("pickaxe.png"), pointer;
 }
 
-.StoneJailed:hover {
-  cursor: pointer;
+.Stone:hover {
+  /* cursor: pointer; */
+  cursor: url("pickaxe.png"), pointer;
 }
 
-.StoneJailed:active {
-  transform: scale(0.9);
-  transition: all 25ms ease-in-out;
+.Stone:active {
+  transform: rotate(3deg);
+  transition: all 25ms ease-out;
 }
 
 .StoneFree {
@@ -289,4 +298,28 @@ body {
 
 .Leaderboard-You {
   color: yellow;
+}
+
+@keyframes flyAway {
+  to {
+    transform: translateY(-450px);
+  }
+}
+
+.Emoji {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  /* background-image: url("sad.png");
+  background-size: contain; */
+  font-size: 40px;
+  color: rgb(47, 231, 47);
+  margin-top: -25px;
+  margin-left: -25px;
+  z-index: 100000;
+  animation: flyAway 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+  user-select: none;
+  pointer-events: none;
+  cursor: url("pickaxe.png"), pointer;
+  font-family: "Comic Sans MS";
 }

@@ -44,7 +44,7 @@ export function indexForItem(itemName: string, items: string[]) {
 }
 
 export function liberatorCost(i: number) {
-  return 10 ** (i + 1);
+  return 7 ** (i + 1);
 }
 
 export function liberatorRate(i: number) {
@@ -52,7 +52,7 @@ export function liberatorRate(i: number) {
 }
 
 export function toolCost(i: number) {
-  return 10 ** (i + 1);
+  return 6 ** (i + 1);
 }
 
 export function toolRate(i: number) {
