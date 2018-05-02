@@ -127,19 +127,38 @@ interface AppState {
 class App extends React.Component<{}, AppState> {
   constructor(props: {}) {
     super(props);
-    this.state = {
-      stonesFreed: 100,
-      toolCount: 1,
-      toolLevel: 0,
-      liberatorLevel: 0,
-      liberatorCount: 0
-    };
     this.onFree = this.onFree.bind(this);
     this.buyTool = this.buyTool.bind(this);
     this.buyLiberator = this.buyLiberator.bind(this);
     this.upgradeLiberator = this.upgradeLiberator.bind(this);
     this.upgradeTool = this.upgradeTool.bind(this);
     setInterval(this.onLiberate.bind(this), 100);
+    setInterval(this.saveStateToLocalStorage.bind(this), 1000);
+
+    const locallySavedState = this.getLocallySavedState();
+    if (locallySavedState) {
+      this.state = locallySavedState;
+    } else {
+      this.state = {
+        stonesFreed: 0,
+        toolCount: 1,
+        toolLevel: 0,
+        liberatorLevel: 0,
+        liberatorCount: 0
+      };
+    }
+  }
+
+  public getLocallySavedState(): AppState | null {
+    const locallySavedState = localStorage.getItem("state");
+    if (locallySavedState) {
+      return JSON.parse(locallySavedState) as AppState;
+    }
+    return null;
+  }
+
+  public saveStateToLocalStorage() {
+    localStorage.setItem("state", JSON.stringify(this.state));
   }
 
   public onStoneTapped(event: MouseEvent) {
@@ -161,9 +180,18 @@ class App extends React.Component<{}, AppState> {
   }
 
   componentDidMount() {
+    document.addEventListener(
+      "touchmove",
+      function(event: Event) {
+        event.preventDefault();
+      },
+      false
+    );
+
     (window.document.querySelector(
       ".Stone"
     )! as HTMLElement).onclick = this.onStoneTapped.bind(this);
+    window.onbeforeunload = this.saveStateToLocalStorage.bind(this);
   }
 
   get toolCost() {
@@ -184,9 +212,12 @@ class App extends React.Component<{}, AppState> {
 
   public onLiberate() {
     const amount = this.liberatorRate * this.state.liberatorCount;
-    this.setState({
-      stonesFreed: this.state.stonesFreed + amount / 10
-    });
+    this.setStonesFreed(this.state.stonesFreed + amount / 10);
+  }
+
+  public setStonesFreed(stonesFreed: number) {
+    this.setState({ stonesFreed });
+    // window.document.title = `${numberWithCommas(stonesFreed)}`;
   }
 
   public upgradeTool() {
@@ -204,9 +235,9 @@ class App extends React.Component<{}, AppState> {
   }
 
   public onFree() {
-    this.setState({
-      stonesFreed: this.state.stonesFreed + this.state.toolCount * this.toolRate
-    });
+    this.setStonesFreed(
+      this.state.stonesFreed + this.state.toolCount * this.toolRate
+    );
   }
 
   public buyTool() {
