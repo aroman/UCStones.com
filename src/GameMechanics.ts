@@ -17,7 +17,7 @@ export const toolNames = [
   "Butter knife",
   "Safety Scissors",
   "Lawn mower",
-  "Magnets?",
+  "Magnets",
   "Scythe",
   "Nice big axe",
   "Wire cutters",
@@ -44,17 +44,17 @@ export function indexForItem(itemName: string, items: string[]) {
 }
 
 export function liberatorCost(i: number) {
-  return 7 ** (i + 1);
+  return 8.7654321 ** (i + 1);
 }
 
 export function liberatorRate(i: number) {
-  return 2 * factorial(i + 1);
+  return 2.345 * factorial(i + 1);
 }
 
 export function toolCost(i: number) {
-  return 6 ** (i + 1);
+  return 8.7654321 ** (i + 1);
 }
 
 export function toolRate(i: number) {
-  return i === 0 ? 1 : 2 * factorial(i + 1);
+  return i === 0 ? 1 : 3.456 * factorial(i + 1);
 }

@@ -17,11 +17,18 @@ import Trophy from "./trophy.svg";
 import Upgrade from "./upgrade.svg";
 
 const numberWithCommas = (x: number) => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return Math.round(x)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-const Stone = (props: { onFree: () => void }) => {
-  return <div className="Stone" onClick={props.onFree} />;
+const Stone = (props: { onFree: () => void; cursorLevel: number }) => {
+  return (
+    <div
+      className={`Stone Cursor-${props.cursorLevel}`}
+      onClick={props.onFree}
+    />
+  );
 };
 
 const topScorers = [
@@ -57,13 +64,14 @@ interface PanelProps {
   buttonColor: string;
   canUpgrade: boolean;
   canBuy: boolean;
+  backgroundClass: string;
   onBuy: () => void;
   onUpgrade: () => void;
 }
 
 const GamePanel = (props: PanelProps) => {
   return (
-    <div className="GamePanel">
+    <div className={`GamePanel ${props.backgroundClass}`}>
       <div className="GamePanel-header">
         <div className="GamePanel-header-title">{props.title}: </div>
         <div className="GamePanel-header-stats">
@@ -120,7 +128,7 @@ class App extends React.Component<{}, AppState> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      stonesFreed: 0,
+      stonesFreed: 100,
       toolCount: 1,
       toolLevel: 0,
       liberatorLevel: 0,
@@ -134,21 +142,28 @@ class App extends React.Component<{}, AppState> {
     setInterval(this.onLiberate.bind(this), 100);
   }
 
+  public onStoneTapped(event: MouseEvent) {
+    console.log("ontoucend");
+    // tslint ignore:line
+    const emoji = document.createElement("div");
+    // const stone = document.querySelector("Stone") as HTMLElement;
+    emoji.classList.add("Emoji");
+    emoji.style.left = `${event.clientX}px`;
+    emoji.style.top = `${event.clientY}px`;
+    document.body.appendChild(emoji);
+    emoji.innerText = `+${numberWithCommas(
+      this.toolRate * this.state.toolCount
+    )}`;
+    emoji.addEventListener("animationend", () => {
+      document.body.removeChild(emoji);
+    });
+    return true;
+  }
+
   componentDidMount() {
-    (window.document.querySelector(".Stone")! as HTMLElement).onclick = e => {
-      // tslint ignore:line
-      const emoji = document.createElement("div");
-      // const stone = document.querySelector("Stone") as HTMLElement;
-      emoji.classList.add("Emoji");
-      emoji.style.left = `${e.clientX}px`;
-      emoji.style.top = `${e.clientY}px`;
-      document.body.appendChild(emoji);
-      emoji.innerText = `+${this.toolRate * this.state.toolCount}`;
-      emoji.addEventListener("animationend", () => {
-        document.body.removeChild(emoji);
-      });
-      return true;
-    };
+    (window.document.querySelector(
+      ".Stone"
+    )! as HTMLElement).onclick = this.onStoneTapped.bind(this);
   }
 
   get toolCost() {
@@ -223,24 +238,25 @@ class App extends React.Component<{}, AppState> {
 
         <div className="Game">
           <div className="GameScore">
-            Stones freed:<div className="GameScore-value">
+            stones freed:<div className="GameScore-value">
               {numberWithCommas(Math.round(this.state.stonesFreed))}
             </div>
           </div>
-          <Stone onFree={this.onFree} />
+          <Stone onFree={this.onFree} cursorLevel={this.state.toolLevel} />
         </div>
 
         <div className="GamePanels">
           <GamePanel
-            title="Tools"
+            title={toolNames[this.state.toolLevel]}
             unit="stones/tap"
             rate={this.toolRate * this.state.toolCount}
             canBuy={this.state.stonesFreed >= this.toolCost}
             quantity={this.state.toolCount}
             cost={this.toolCost}
-            label={toolNames[this.state.toolLevel]}
+            label="Purchase"
             buttonColor="#8D19C6"
             onBuy={this.buyTool}
+            backgroundClass={`Background-Tool-${this.state.toolLevel}`}
             canUpgrade={
               this.state.stonesFreed >= toolCost(this.state.toolLevel + 1)
             }
@@ -248,15 +264,18 @@ class App extends React.Component<{}, AppState> {
           />
 
           <GamePanel
-            title="Liberators"
+            title={liberatorNames[this.state.liberatorLevel]}
             unit="stones/sec"
             rate={this.liberatorRate * this.state.liberatorCount}
             canBuy={this.state.stonesFreed >= this.liberatorCost}
             quantity={this.state.liberatorCount}
             cost={this.liberatorCost}
-            label={liberatorNames[this.state.liberatorLevel]}
+            label={"Recruit"}
             buttonColor="#d8720f"
             onBuy={this.buyLiberator}
+            backgroundClass={`Background-Liberator-${
+              this.state.liberatorLevel
+            }`}
             canUpgrade={
               this.state.stonesFreed >=
               liberatorCost(this.state.liberatorLevel + 1)

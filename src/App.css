@@ -1,6 +1,32 @@
+@keyframes rainbow {
+  0% {
+    background-position: 0% 82%;
+  }
+  50% {
+    background-position: 100% 19%;
+  }
+  100% {
+    background-position: 0% 82%;
+  }
+}
+
 body {
-  background-color: #4e92e0;
   font-family: "Comic Sans MS";
+  background: linear-gradient(
+    124deg,
+    #ff2400,
+    #e81d1d,
+    #e8b71d,
+    #e3e81d,
+    #1de840,
+    #1ddde8,
+    #2b1de8,
+    #dd00f3,
+    #dd00f3
+  );
+  background-size: 1800% 1800%;
+
+  animation: rainbow 18s ease infinite;
 }
 
 .App {
@@ -60,27 +86,17 @@ body {
   }
 }
 
-/* @media only screen and (min-width: 1000px) {
-  .GamePanel {
-    width: 30vw !important;
-  }
-} */
-
 .GamePanel {
-  /* height:75px; */
   background-color: black;
+  /* background-position-y: -18.5px; */
+  background-size: 50px;
   padding: 15px;
   width: 85vw;
   border-radius: 10px;
   border: 2px solid white;
   padding-top: 10px;
   padding-bottom: 30px;
-  background-image: url("112.png");
-  background-size: cover;
   margin-bottom: 10px;
-  /* margin: 15px; */
-  /* width: 25vw; */
-  /* backdrop-filter: blur(5px); */
 }
 
 .GamePanel-inner {
@@ -89,18 +105,28 @@ body {
 }
 
 .GamePanel-header {
-  display: flex;
-  align-items: center;
+  /* background-color: rgba(0, 0, 0, 0.9); */
   /* flex-direction: column; */
 }
 
 .GamePanel-header-title {
+  display: inline-block;
+  background-color: black;
   font-weight: bold;
   margin-right: 5px;
+  padding: 3px;
+  margin: -3px;
+  margin-right: 3px;
+  border-radius: 3px;
 }
 
 .GamePanel-header-stats {
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.9);
   font-size: 16px;
+  padding: 3px;
+  margin: -3px;
+  border-radius: 3px;
 }
 
 .GamePanel-button {
@@ -155,12 +181,22 @@ body {
 }
 
 .GamePanel-button-subtitle {
-  margin-bottom: -22px;
+  margin-bottom: -27px;
   font-size: 12px;
+  margin-top: -5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: rgba(0, 0, 0, 1);
   align-self: center;
 }
 
 .GameScore {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 25px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 25px;
@@ -270,24 +306,11 @@ body {
   background-image: url("stone.png");
   background-size: cover;
   animation: pulsate 1s ease-in-out infinite alternate;
-  cursor: url("pickaxe.png"), pointer;
-}
-
-.Stone:hover {
-  /* cursor: pointer; */
-  cursor: url("pickaxe.png"), pointer;
 }
 
 .Stone:active {
   transform: rotate(3deg);
   transition: all 25ms ease-out;
-}
-
-.StoneFree {
-  z-index: 100;
-  background-image: url("stone-free.png");
-  background-color: none;
-  background-size: cover;
 }
 
 .Leaderboard-ScoreDivider {
@@ -320,6 +343,98 @@ body {
   animation: flyAway 1s cubic-bezier(0.645, 0.045, 0.355, 1);
   user-select: none;
   pointer-events: none;
-  cursor: url("pickaxe.png"), pointer;
+  /* cursor: url("pickaxe.png"), pointer; */
   font-family: "Comic Sans MS";
+}
+
+.Background-Tool-0 {
+  background-image: url("cursors/plastic-knife.png");
+}
+
+.Background-Tool-0 {
+  background-image: url("cursors/plastic-knife.png");
+}
+
+.Background-Tool-1 {
+  background-image: url("cursors/butter-knife.png");
+}
+
+.Background-Tool-2 {
+  background-image: url("cursors/safety-scissors.png");
+}
+
+.Background-Tool-3 {
+  background-image: url("cursors/lawn-mower.png");
+}
+
+.Background-Tool-4 {
+  background-image: url("cursors/magnet.png");
+}
+
+.Background-Tool-5 {
+  background-image: url("cursors/safety-scissors.png");
+}
+
+.Background-Tool-6 {
+  background-image: url("cursors/axe.png");
+}
+
+.Background-Tool-7 {
+  background-image: url("cursors/wire-cutters.png");
+}
+
+.Background-Tool-8 {
+  background-image: url("cursors/lightsaber.png");
+}
+
+.Background-Tool-9 {
+  background-image: url("cursors/brain.png");
+}
+
+.Background-Tool-10 {
+  background-image: url("cursors/subronium.png");
+}
+
+.Cursor-0 {
+  cursor: url("cursors/plastic-knife.png"), pointer;
+}
+
+.Cursor-1 {
+  cursor: url("cursors/butter-knife.png"), pointer;
+}
+
+.Cursor-2 {
+  cursor: url("cursors/safety-scissors.png"), pointer;
+}
+
+.Cursor-3 {
+  cursor: url("cursors/lawn-mower.png"), pointer;
+}
+
+.Cursor-4 {
+  cursor: url("cursors/magnet.png"), pointer;
+}
+
+.Cursor-5 {
+  cursor: url("cursors/safety-scissors.png"), pointer;
+}
+
+.Cursor-6 {
+  cursor: url("cursors/axe.png"), pointer;
+}
+
+.Cursor-7 {
+  cursor: url("cursors/wire-cutters.png"), pointer;
+}
+
+.Cursor-8 {
+  cursor: url("cursors/lightsaber.png"), pointer;
+}
+
+.Cursor-9 {
+  cursor: url("cursors/brain.png"), pointer;
+}
+
+.Cursor-10 {
+  cursor: url("cursors/subronium.png"), pointer;
 }
