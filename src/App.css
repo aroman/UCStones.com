@@ -282,7 +282,7 @@ body {
 
 @keyframes pulsate {
   from {
-    box-shadow: 0 0 50px 15px white;
+    box-shadow: 0 0 20px 15px white;
   }
   to {
     box-shadow: 0 0 3px 3px white;
