@@ -43,18 +43,18 @@ export function indexForItem(itemName: string, items: string[]) {
   return index;
 }
 
-export function liberatorCost(i: number) {
-  return 8.7654321 ** (i + 1);
+export function liberatorCost(level: number) {
+  return 9.7654321 ** (level + 1);
 }
 
-export function liberatorRate(i: number) {
-  return 2.345 * factorial(i + 1);
+export function liberatorRate(level: number) {
+  return 2.1435 * factorial(level + 1);
 }
 
-export function toolCost(i: number) {
-  return 8.7654321 ** (i + 1);
+export function toolCost(level: number) {
+  return 9.7654321 ** (level + 1);
 }
 
-export function toolRate(i: number) {
-  return i === 0 ? 1 : 3.456 * factorial(i + 1);
+export function toolRate(level: number) {
+  return level === 0 ? 1 : 2.856 * factorial(level + 1);
 }

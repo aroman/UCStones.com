@@ -184,14 +184,6 @@ class App extends React.Component<{}, AppState> {
   }
 
   componentDidMount() {
-    document.addEventListener(
-      "touchmove",
-      function(event: Event) {
-        event.preventDefault();
-      },
-      false
-    );
-
     (window.document.querySelector(
       ".Stone"
     )! as HTMLElement).onclick = this.onStoneTapped.bind(this);

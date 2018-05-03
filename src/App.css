@@ -39,24 +39,6 @@ body {
   font-size: 18px;
 }
 
-.Banner {
-  /* background-image: url("./uc.png");
-  background-size: cover; */
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.BannerCard {
-  background-color: rgba(0, 0, 0, 0.5);
-  /* border: 2px solid white; */
-  /* border-radius: 15px; */
-  width: 100%;
-  /* padding: 20px; */
-  padding: 50px;
-}
-
 .Game {
   display: flex;
   align-items: center;
@@ -87,12 +69,11 @@ body {
 
 .GamePanel {
   background-color: black;
-  /* background-position-y: -18.5px; */
   background-size: 50px;
   padding: 15px;
   width: 85vw;
   border-radius: 10px;
-  border: 2px solid white;
+  border: 3px solid white;
   padding-top: 10px;
   padding-bottom: 30px;
   margin-bottom: 10px;
@@ -147,9 +128,6 @@ body {
 
 .GamePanel-button-disabled:hover {
   cursor: not-allowed !important;
-}
-
-.GamePanel-button-disabled:active {
 }
 
 .GamePanel-button:hover {
@@ -294,7 +272,6 @@ body {
 }
 
 .Stone {
-  /* background-color: rgba(0, 0, 0, 0.5); */
   border-radius: 10px;
   width: 250px;
   height: 250px;
@@ -341,7 +318,6 @@ body {
   font-family: "Comic Sans MS";
   pointer-events: none;
 }
-
 
 .Background-Tool-0 {
   background-image: url("cursors/plastic-knife.png");
@@ -394,6 +370,11 @@ body {
 }
 
 .Background-Liberator-1 {
+  background: url("backgrounds/stuco.png");
+  background-size: 100%;
+  /* background-size: contain; */
+  background-repeat: no-repeat;
+  /* background-position-y: -25px; */
 }
 
 .Background-Liberator-2 {
