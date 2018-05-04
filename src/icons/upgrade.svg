@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="17px" height="16px" viewBox="0 0 17 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>Up Arrow</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="iPhone-8-Copy-8" transform="translate(-238.000000, -232.000000)" fill="#FFFFFF">
+            <g id="Group-7" transform="translate(218.000000, 101.000000)">
+                <g id="Tool">
+                    <g id="Group-3">
+                        <g transform="translate(-1.000000, 123.000000)" id="Group-11">
+                            <g transform="translate(21.000000, 6.000000)">
+                                <g id="Group-12">
+                                    <path d="M8.5,18 C3.80557939,18 0,14.4182782 0,10 C0,5.58172178 3.80557939,2 8.5,2 C13.1944206,2 17,5.58172178 17,10 C17,14.4182782 13.1944206,18 8.5,18 Z M8.5,5.36842105 L4.675,9.76037075 L7.225,9.76037075 L7.225,14.6315789 L9.775,14.6315789 L9.775,9.76037075 L12.325,9.76037075 L8.5,5.36842105 Z" id="Up-Arrow"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

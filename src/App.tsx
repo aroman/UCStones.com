@@ -2,19 +2,12 @@
 import * as React from "react";
 import "./App.css";
 
-import {
-  toolRate,
-  toolCost,
-  liberatorCost,
-  liberatorRate,
-  toolNames,
-  liberatorNames
-} from "./GameMechanics";
+import HandIcon from "./icons/hand.svg";
+import MegaphoneIcon from "./icons/megaphone.svg";
+import CampusIcon from "./icons/campus.svg";
+import UpgradeIcon from "./icons/upgrade.svg";
 
-// import Logo from "./logo.png";
-import Plus from "./plus.svg";
-import Trophy from "./trophy.svg";
-import Upgrade from "./upgrade.svg";
+import { tools, protesters, publicFigures, campuses } from "./GameMechanics";
 
 const numberWithCommas = (x: number) => {
   return Math.round(x)
@@ -22,94 +15,28 @@ const numberWithCommas = (x: number) => {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-const Stone = (props: { onFree: () => void; cursorLevel: number }) => {
-  return (
-    <div
-      className={`Stone Cursor-${props.cursorLevel}`}
-      onClick={props.onFree}
-    />
-  );
-};
-
-const topScorers = [
-  {
-    name: "SUBRA",
-    score: 5492
-  },
-  {
-    name: "Delt is OK",
-    score: 4452
-  },
-  {
-    name: "sn3k4lyf",
-    score: 4330
-  },
-  {
-    name: "Andy Borans",
-    score: 3004
-  },
-  {
-    name: "112TA",
-    score: 2493
-  }
-];
-
-interface PanelProps {
-  title: string;
-  rate: number;
-  unit: string;
-  label: string;
-  quantity: number;
+interface SectionProps {
+  count?: number;
+  name: string;
+  description: string;
   cost: number;
-  buttonColor: string;
-  canUpgrade: boolean;
-  canBuy: boolean;
-  backgroundClass: string;
-  onBuy: () => void;
-  onUpgrade: () => void;
+  verb: string;
+  image?: string;
 }
 
-const GamePanel = (props: PanelProps) => {
+const SectionCard = (props: SectionProps) => {
   return (
-    <div className={`GamePanel ${props.backgroundClass}`}>
-      <div className="GamePanel-header">
-        <div className="GamePanel-header-title">{props.title}: </div>
-        <div className="GamePanel-header-stats">
-          {numberWithCommas(props.rate)} {props.unit}
+    <div className="SectionCard">
+      <img className="SectionCard-picture" src={props.image} />
+      <div className="SectionCard-info">
+        {props.count === undefined ? null : (
+          <div className="SectionCard-count">x {props.count}</div>
+        )}
+        <div className="SectionCard-name">{props.name}</div>
+        <div className="SectionCard-description">{props.description}</div>
+        <div className="SectionCard-button">
+          <strong>{props.verb}</strong> (costs {props.cost})
         </div>
-      </div>
-      <div className="GamePanel-inner">
-        <div
-          className={`GamePanel-button ${
-            props.canBuy ? "" : "GamePanel-button-disabled"
-          }`}
-          style={{ backgroundColor: props.buttonColor }}
-        >
-          <div
-            className="GamePanel-button-inner"
-            onClick={props.canBuy ? props.onBuy : void 0}
-          >
-            <img className="GamePanel-button-icon" src={Plus} />
-            <div className="GamePanel-button-label">
-              {props.label} ({numberWithCommas(props.quantity)})
-            </div>
-          </div>
-          <div className="GamePanel-button-subtitle">
-            Cost: {numberWithCommas(props.cost)} stones
-          </div>
-        </div>
-
-        {props.canUpgrade ? (
-          <div
-            className="GamePanel-button UpgradeButton"
-            onClick={props.onUpgrade}
-          >
-            <div className="GamePanel-button-inner noNudge">
-              <img className="GamePanel-button-icon" src={Upgrade} />
-              <div className="GamePanel-button-label">UPGRADE</div>
-            </div>
-          </div>
-        ) : null}
       </div>
     </div>
   );
@@ -126,13 +53,13 @@ interface AppState {
 class App extends React.Component<{}, AppState> {
   constructor(props: {}) {
     super(props);
-    this.onFree = this.onFree.bind(this);
-    this.buyTool = this.buyTool.bind(this);
-    this.buyLiberator = this.buyLiberator.bind(this);
+    this.onStoneTapped = this.onStoneTapped.bind(this);
+    this.onStoneClicked = this.onStoneClicked.bind(this);
+
     this.upgradeLiberator = this.upgradeLiberator.bind(this);
     this.upgradeTool = this.upgradeTool.bind(this);
     this.resetState = this.resetState.bind(this);
-    setInterval(this.onLiberate.bind(this), 100);
+
     setInterval(this.saveStateToLocalStorage.bind(this), 1000);
 
     const locallySavedState = this.getLocallySavedState();
@@ -141,6 +68,30 @@ class App extends React.Component<{}, AppState> {
     } else {
       this.state = this.getInitialState();
     }
+  }
+
+  public componentDidMount() {
+    let lastTouchEnd = 0;
+    document.addEventListener(
+      "touchend",
+      event => {
+        const isTapOnStone =
+          event.target && (event.target as any).classList.contains("Stone");
+        if (isTapOnStone) {
+          return;
+        }
+        const now = new Date().getTime();
+        if (now - lastTouchEnd <= 600) {
+          event.preventDefault();
+        }
+        lastTouchEnd = now;
+      },
+      false
+    );
+    // (window.document.querySelector(
+    //   ".Stone"
+    // )! as HTMLElement).onclick = this.onStoneTapped.bind(this);
+    window.onbeforeunload = this.saveStateToLocalStorage.bind(this);
   }
 
   public getInitialState(): AppState {
@@ -165,45 +116,43 @@ class App extends React.Component<{}, AppState> {
     localStorage.setItem("state", JSON.stringify(this.state));
   }
 
-  public onStoneTapped(event: MouseEvent) {
-    console.log("ontoucend");
-    // tslint ignore:line
-    const emoji = document.createElement("div");
-    // const stone = document.querySelector("Stone") as HTMLElement;
-    emoji.classList.add("Emoji");
-    emoji.style.left = `${event.clientX}px`;
-    emoji.style.top = `${event.clientY}px`;
-    document.body.appendChild(emoji);
-    emoji.innerText = `+${numberWithCommas(
-      this.toolRate * this.state.toolCount
-    )}`;
-    emoji.addEventListener("animationend", () => {
-      document.body.removeChild(emoji);
+  public onStoneTapped(event: React.TouchEvent<HTMLDivElement>) {
+    console.log(event.touches);
+    if (event.touches.length === 0) {
+      return;
+    }
+    this.onFree();
+    this.pointBubbleAt(
+      event.touches[0].clientX,
+      event.touches[0].clientY,
+      this.state.toolCount
+    );
+  }
+
+  public onStoneClicked(event: React.MouseEvent<HTMLDivElement>) {
+    this.onFree();
+    this.pointBubbleAt(event.clientX, event.clientY, this.state.toolCount);
+  }
+
+  public pointBubbleAt(x: number, y: number, value: number) {
+    const shard = document.createElement("div");
+    shard.classList.add("Shard");
+    shard.style.left = `${x}px`;
+    shard.style.top = `${y}px`;
+    document.body.appendChild(shard);
+    shard.innerText = `+${numberWithCommas(value)}`;
+    shard.addEventListener("animationend", () => {
+      document.body.removeChild(shard);
     });
     return true;
   }
 
-  componentDidMount() {
-    (window.document.querySelector(
-      ".Stone"
-    )! as HTMLElement).onclick = this.onStoneTapped.bind(this);
-    window.onbeforeunload = this.saveStateToLocalStorage.bind(this);
+  get points() {
+    return this.state.stonesFreed;
   }
 
-  get toolCost() {
-    return toolCost(this.state.toolLevel);
-  }
-
-  get liberatorCost() {
-    return liberatorCost(this.state.liberatorLevel);
-  }
-
-  get liberatorRate() {
-    return liberatorRate(this.state.liberatorLevel);
-  }
-
-  get toolRate() {
-    return toolRate(this.state.toolLevel);
+  get currentTool() {
+    return tools[this.state.toolLevel];
   }
 
   public resetState() {
@@ -212,17 +161,21 @@ class App extends React.Component<{}, AppState> {
     }
   }
 
-  public onLiberate() {
-    const amount = this.liberatorRate * this.state.liberatorCount;
-    this.setStonesFreed(this.state.stonesFreed + amount / 10);
-  }
-
   public setStonesFreed(stonesFreed: number) {
     this.setState({ stonesFreed });
-    // window.document.title = `${numberWithCommas(stonesFreed)}`;
+  }
+
+  get toolIsUpgradable() {
+    return (
+      this.points < this.currentTool.upgradePoints &&
+      this.state.toolLevel < tools.length - 1
+    );
   }
 
   public upgradeTool() {
+    if (!this.toolIsUpgradable) {
+      return;
+    }
     this.setState({
       toolLevel: this.state.toolLevel + 1,
       toolCount: 1
@@ -237,110 +190,131 @@ class App extends React.Component<{}, AppState> {
   }
 
   public onFree() {
-    this.setStonesFreed(
-      this.state.stonesFreed + this.state.toolCount * this.toolRate
-    );
+    this.setStonesFreed(this.state.stonesFreed);
   }
 
-  public buyTool() {
-    this.setState({
-      stonesFreed: this.state.stonesFreed - this.toolCost,
-      toolCount: this.state.toolCount + 1
-    });
-  }
-
-  public buyLiberator() {
-    this.setState({
-      stonesFreed: this.state.stonesFreed - this.liberatorCost,
-      liberatorCount: this.state.liberatorCount + 1
-    });
-  }
+  // public buyTool() {
+  //   this.setState({
+  //     stonesFreed: this.state.stonesFreed - this.toolCost,
+  //     toolCount: this.state.toolCount + 1
+  //   });
+  // }
 
   public render() {
     return (
       <div className="App">
-        {/* <div className="Banner">
-          <div className="BannerCard">
-            <div className="BannerCard-instructions">
-              <div>1. Tap a UC Stone to free it</div>
-              <div>2. Buy tools and hire liberators</div>
-              <div>3. FREE ALL THE STONES!!!</div>
-            </div>
+        <div className="TopBanner" onClick={this.resetState}>
+          <div className="TopBanner-title">
+            Stones freed: {numberWithCommas(Math.round(this.state.stonesFreed))}
           </div>
-        </div> */}
-
-        <div className="Game">
-          <div className="GameScore" onClick={this.resetState}>
-            stones freed:<div className="GameScore-value">
-              {numberWithCommas(Math.round(this.state.stonesFreed))}
-            </div>
-          </div>
-          <Stone onFree={this.onFree} cursorLevel={this.state.toolLevel} />
+          <div className="TopBanner-subtitle">45,000 per second</div>
         </div>
-
-        <div className="GamePanels">
-          <GamePanel
-            title={toolNames[this.state.toolLevel]}
-            unit="stones/tap"
-            rate={this.toolRate * this.state.toolCount}
-            canBuy={this.state.stonesFreed >= this.toolCost}
-            quantity={this.state.toolCount}
-            cost={this.toolCost}
-            label="Purchase"
-            buttonColor="#8D19C6"
-            onBuy={this.buyTool}
-            backgroundClass={`Background-Tool-${this.state.toolLevel}`}
-            canUpgrade={
-              this.state.stonesFreed >= toolCost(this.state.toolLevel + 1)
-            }
-            onUpgrade={this.upgradeTool}
+        <div className="MainStage">
+          <div
+            className={`Stone Cursor-${this.state.toolLevel}`}
+            onClick={this.onStoneClicked}
+            onTouchEnd={this.onStoneTapped}
           />
-
-          <GamePanel
-            title={liberatorNames[this.state.liberatorLevel]}
-            unit="stones/sec"
-            rate={this.liberatorRate * this.state.liberatorCount}
-            canBuy={this.state.stonesFreed >= this.liberatorCost}
-            quantity={this.state.liberatorCount}
-            cost={this.liberatorCost}
-            label={"Recruit"}
-            buttonColor="#d8720f"
-            onBuy={this.buyLiberator}
-            backgroundClass={`Background-Liberator-${
-              this.state.liberatorLevel
+          <div
+            className={`ToolBox ${
+              this.toolIsUpgradable ? "ToolBoxUpgradable" : ""
             }`}
-            canUpgrade={
-              this.state.stonesFreed >=
-              liberatorCost(this.state.liberatorLevel + 1)
-            }
-            onUpgrade={this.upgradeLiberator}
-          />
+            onClick={this.upgradeTool}
+          >
+            <div className="ToolBox-name">{this.currentTool.name}</div>
+            <div className="ToolBox-description">
+              {this.currentTool.description}
+            </div>
+            <img className="ToolBox-image" src={this.currentTool.image} />
+            {this.toolIsUpgradable ? (
+              <div className="ToolBox-upgrade">
+                <img className="ToolBox-upgrade-icon" src={UpgradeIcon} />
+                <div className="ToolBox-upgrade-label">UPGRADE</div>
+              </div>
+            ) : null}
+          </div>
         </div>
 
-        <div className="Leaderboard">
-          <div className="LeaderboardCard">
-            <div className="LeaderboardCard-title">
-              <img src={Trophy} />
-              <div>Most Stones Freed</div>
-            </div>
-            <div className="LeaderboardCard-list">
-              {topScorers.map(({ name, score }, i) => (
-                <div>
-                  {i + 1}. {name} ({score} stones)
+        <div className="Sections">
+          <div className="Section SectionProtesters">
+            <div className="SectionBanner">
+              <img className="SectionBanner-icon" src={HandIcon} />
+              <div className="SectionBanner-label">
+                <div className="SectionBanner-name">Protesters</div>
+                <div className="SectionBanner-description">
+                  Set stones free periodically
                 </div>
+              </div>
+            </div>
+            <div className="SectionGutter">
+              {protesters.map(protester => (
+                <SectionCard
+                  count={0}
+                  name={protester.name}
+                  description={protester.description}
+                  cost={protester.cost}
+                  verb={"HIRE"}
+                  image={protester.image}
+                />
               ))}
-              <div className="Leaderboard-ScoreDivider">...</div>
-              <div>
-                {344}. Yikes! ({590} stones)
+            </div>
+          </div>
+
+          <div className="Sections">
+            <div className="Section SectionPublicFigures">
+              <div className="SectionBanner">
+                <img className="SectionBanner-icon" src={MegaphoneIcon} />
+                <div className="SectionBanner-label">
+                  <div className="SectionBanner-name">Public Figures</div>
+                  <div className="SectionBanner-description">
+                    Decrease costs with their influence
+                  </div>
+                </div>
               </div>
-              <div className="Leaderboard-You">
-                {345}. Jaimeeee ({579} stones)
-              </div>
-              <div>
-                {346}. 01101001 ({577} stones)
+              <div className="SectionGutter">
+                {publicFigures.map(publicFigure => (
+                  <SectionCard
+                    name={publicFigure.name}
+                    description={publicFigure.description}
+                    cost={publicFigure.cost}
+                    verb={"CONVINCE"}
+                    image={publicFigure.image}
+                  />
+                ))}
               </div>
             </div>
           </div>
+
+          <div className="Sections">
+            <div className="Section SectionCampuses">
+              <div className="SectionBanner">
+                <img className="SectionBanner-icon" src={CampusIcon} />
+                <div className="SectionBanner-label">
+                  <div className="SectionBanner-name">Campuses</div>
+                  <div className="SectionBanner-description">
+                    Multiplies stones freed per tap
+                  </div>
+                </div>
+              </div>
+              <div className="SectionGutter">
+                {campuses.map(campus => (
+                  <SectionCard
+                    name={campus.name}
+                    description={campus.description}
+                    cost={campus.cost}
+                    verb={"EXPAND"}
+                    image={campus.image}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="Footer">
+          made with love by&nbsp;<a href="https://avi.bio" target="_blank">
+            Avi
+          </a>
         </div>
       </div>
     );

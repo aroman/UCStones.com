@@ -1,12 +1,12 @@
 @keyframes rainbow {
   0% {
-    background-position: 0% 82%;
+    background-position: 0% 50%;
   }
   50% {
-    background-position: 100% 19%;
+    background-position: 100% 50%;
   }
   100% {
-    background-position: 0% 82%;
+    background-position: 0% 50%;
   }
 }
 
@@ -23,13 +23,14 @@ body {
     #dd00f3,
     #dd00f3
   );
-  background-size: 1800% 1800%;
-  animation: rainbow 18s ease infinite;
+  /* background-size: 1200% 1200%;
+  animation: rainbow 18s ease infinite;  */
 }
 
 .App {
   font-family: "Comic Sans MS";
   margin: 0;
+  margin-top: 100px;
   padding: 0;
   display: flex;
   align-items: center;
@@ -37,265 +38,135 @@ body {
   flex-direction: column;
   color: white;
   font-size: 18px;
-}
-
-.Game {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-top: 20px;
-  width: 80vw;
-}
-
-.GamePanels {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
   user-select: none;
 }
 
-@media only screen and (min-width: 750px) {
-  .GamePanels {
-    flex-direction: row;
-  }
-  .GamePanel {
-    width: 40vw !important;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-}
-
-.GamePanel {
-  background-color: black;
-  background-size: 50px;
-  padding: 15px;
-  width: 85vw;
-  border-radius: 10px;
-  border: 3px solid white;
-  padding-top: 10px;
-  padding-bottom: 30px;
-  margin-bottom: 10px;
-}
-
-.GamePanel-inner {
-  flex-shrink: 0;
-  display: flex;
-}
-
-.GamePanel-header-title {
-  display: inline-block;
-  background-color: rgba(0, 0, 0, 0.7);
-  font-size: 16px;
-  font-weight: bold;
-  margin-right: 5px;
-  padding: 3px;
-  margin: -3px;
-  margin-right: 3px;
-  border-radius: 3px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.GamePanel-header-stats {
-  display: inline-block;
-  background-color: rgba(0, 0, 0, 0.7);
-  font-size: 16px;
-  padding: 3px;
-  margin: -3px;
-  border-radius: 3px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.GamePanel-button {
-  margin-top: 10px;
-  border-radius: 5px;
-  border: 1px solid white;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  user-select: none;
-  margin-right: 15px;
-  font-size: 16px;
-}
-
-.GamePanel-button-disabled {
-  background-color: gray !important;
-}
-
-.GamePanel-button-disabled:hover {
-  cursor: not-allowed !important;
-}
-
-.GamePanel-button:hover {
-  cursor: pointer;
-}
-
-.GamePanel-button-inner {
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 16px;
-}
-
-.noNudge {
-  padding-bottom: 10px;
-  letter-spacing: 1px;
-}
-
-.GamePanel-button-icon {
-  margin-right: 7px;
-  height: 20px;
-}
-
-.GamePanel-button-subtitle {
-  margin-bottom: -27px;
-  font-size: 12px;
-  margin-top: -3px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  background-color: rgba(0, 0, 0, 0.7);
-  align-self: center;
-  margin-right: 3px;
-  border-radius: 3px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-.GameScore {
-  background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 25px;
+.TopBanner {
+  background-color: rgba(0, 0, 0, 0.9);
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 10px;
   padding-top: 8px;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.GameScore-value {
-  font-family: "Hack";
-  font-weight: normal;
-  margin-left: 10px;
-  font-size: 22px;
-  margin-top: 2px;
-}
-
-.BannerCard-instructions {
-  line-height: 30px;
-}
-
-.BannerCard-title {
-  font-size: 24px;
-  display: flex;
-  font-weight: bold;
-  justify-content: space-between;
-}
-
-.BannerCard-title img {
-  height: 40px;
-}
-
-.Leaderboard {
-  background-image: url("./subra.png");
-  /* background-position-y: -30vh; */
-  background-size: 100% auto;
-  background-repeat: no-repeat;
+  font-size: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  /* padding: 50px; */
-  display: flex;
-  margin-top: 15px;
-  align-items: center;
-  justify-content: center;
+  z-index: 10;
 }
 
-.LeaderboardCard-title {
-  display: flex;
-  font-size: 24px;
-  margin-bottom: 15px;
-}
-
-.LeaderboardCard-title img {
-  margin-right: 15px;
-  /* height: 24px; */
-}
-
-.LeaderboardCard {
-  padding: 20px;
-  background-color: rgba(38, 38, 38, 0.8);
-  /* border-radius: 15px; */
-  /* border: 2px solid rgb(127, 127, 127); */
-  width: 100vw;
+.TopBanner-title {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  justify-content: flex-start;
 }
 
-.LeaderboardCard-list {
-  line-height: 30px;
-  width: 80vw;
-}
-
-.Garden {
-  display: flex;
-  flex-direction: column;
-  /* margin-top: 50px; */
-  /* margin-bottom: 50px; */
-}
-
-.Garden-logo {
-  position: absolute;
-  top: 10vh;
-}
-
-.Garden-row {
-  display: flex;
-  justify-content: space-between;
+.TopBanner-subtitle {
+  margin-top: 2px;
+  font-size: 16px;
 }
 
 @keyframes pulsate {
-  from {
-    box-shadow: 0 0 20px 15px white;
-  }
   to {
     box-shadow: 0 0 3px 3px white;
   }
 }
 
-.Stone {
-  border-radius: 10px;
-  width: 250px;
-  height: 250px;
+.MainStage {
+  display: flex;
+  align-items: center;
   margin-bottom: 25px;
-  border: 10px solid black;
-  box-shadow: 0 0 10px 3px white;
+}
+
+.Stone {
+  border-radius: 5px;
+  width: 180px;
+  height: 180px;
+  box-shadow: 0 0 25px 10px white;
   background-image: url("stone.png");
   background-size: cover;
   animation: pulsate 1s ease-in-out infinite alternate;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.ToolBox {
+  width: 140px;
+  height: 180px;
+  margin-left: 25px;
+  background-color: gray;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  text-align: center;
+  padding: 5px;
+  padding-top: 10px;
+  box-sizing: border-box;
+  border: 3px solid white;
+  border-radius: 10px;
+  background-image: radial-gradient(
+    closest-corner at 50% 65%,
+    #aaa9a9 0%,
+    black 100%
+  );
+}
+
+.ToolBox-image {
+  height: 64px;
+}
+
+.ToolBox-name {
+  font-size: 16px;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.ToolBoxUpgradable .ToolBox-image {
+  margin-top: -5px;
+  margin-bottom: 5px;
+  height: 64px;
+}
+
+.ToolBoxUpgradable {
+  background-image: radial-gradient(
+    closest-corner at 50% 60%,
+    #aaa9a9 0%,
+    black 100%
+  );
+}
+
+.ToolBoxUpgradable:hover {
+  cursor: pointer;
+}
+
+.ToolBox-description {
+  padding-bottom: 10px;
+  font-size: 12px;
+}
+
+.ToolBox-upgrade {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-size: 14px;
+  width: 100%;
+  background-color: #ffb130;
+  margin-bottom: -5px;
+  padding-bottom: 5px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  padding: 5px;
+}
+
+.ToolBox-upgrade-icon {
+  margin-right: 5px;
 }
 
 .Stone:active {
   transform: rotate(3deg);
   transition: all 25ms ease-out;
-}
-
-.Leaderboard-ScoreDivider {
-  font-size: 30px;
-  margin-top: -5px;
-  margin-bottom: 10px;
-}
-
-.Leaderboard-You {
-  color: yellow;
 }
 
 @keyframes flyAway {
@@ -304,169 +175,204 @@ body {
   }
 }
 
-.Emoji {
+.Shard {
   position: absolute;
   width: 50px;
   height: 50px;
-  font-size: 40px;
+  font-size: 30px;
   color: rgb(47, 231, 47);
   margin-top: -25px;
   margin-left: -25px;
-  z-index: 100000;
+  z-index: 100;
   animation: flyAway 1s cubic-bezier(0.645, 0.045, 0.355, 1);
   user-select: none;
   font-family: "Comic Sans MS";
   pointer-events: none;
 }
 
-.Background-Tool-0 {
-  background-image: url("cursors/plastic-knife.png");
+.Sections {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
 }
 
-.Background-Tool-1 {
-  background-image: url("cursors/butter-knife.png");
+.Section {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-top: 35px;
 }
 
-.Background-Tool-2 {
-  background-image: url("cursors/safety-scissors.png");
+.SectionGutter {
+  background-size: 200px;
+  overflow-x: auto;
+  width: 100vw;
+  height: 140px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.5) inset;
 }
 
-.Background-Tool-3 {
-  background-image: url("cursors/lawn-mower.png");
-}
-
-.Background-Tool-4 {
-  background-image: url("cursors/magnet.png");
-}
-
-.Background-Tool-5 {
-  background-image: url("cursors/safety-scissors.png");
-}
-
-.Background-Tool-6 {
-  background-image: url("cursors/axe.png");
-}
-
-.Background-Tool-7 {
-  background-image: url("cursors/wire-cutters.png");
-}
-
-.Background-Tool-8 {
-  background-image: url("cursors/lightsaber.png");
-}
-
-.Background-Tool-9 {
-  background-image: url("cursors/brain.png");
-}
-
-.Background-Tool-10 {
-  background-image: url("cursors/subronium.png");
-}
-
-.Background-Liberator-0 {
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-    url("backgrounds/112.png");
-  background-size: 100%;
-}
-
-.Background-Liberator-1 {
-  background: url("backgrounds/stuco.png");
-  background-size: 100%;
-  /* background-size: contain; */
-  background-repeat: no-repeat;
-  /* background-position-y: -25px; */
-}
-
-.Background-Liberator-2 {
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url("backgrounds/uc-stoner.jpeg");
-  background-size: 100%;
-  background-position-y: -125px;
-  /* background-image: url("backgrounds/safety-scissors.png"); */
-}
-
-.Background-Liberator-3 {
-  /* background-image: url("backgrounds/lawn-mower.png"); */
-}
-
-.Background-Liberator-4 {
-  /* background-image: url("backgrounds/magnet.png"); */
-}
-
-.Background-Liberator-5 {
-  /* background-image: url("backgrounds/safety-scissors.png"); */
-}
-
-.Background-Liberator-6 {
-  /* background-image: url("backgrounds/axe.png"); */
-}
-
-.Background-Liberator-7 {
-  /* background-image: url("backgrounds/wire-cutters.png"); */
-}
-
-.Background-Liberator-8 {
-  /* background-image: url("backgrounds/lightsaber.png"); */
-}
-
-.Background-Liberator-9 {
-  /* background-image: url("backgrounds/brain.png"); */
-}
-
-.Background-Liberator-10 {
-  /* background-image: url("backgrounds/subronium.png"); */
-}
-
-.Cursor-0 {
-  cursor: url("cursors/plastic-knife.png"), pointer;
-}
-
-.Cursor-1 {
-  cursor: url("cursors/butter-knife.png"), pointer;
-}
-
-.Cursor-2 {
-  cursor: url("cursors/safety-scissors.png"), pointer;
-}
-
-.Cursor-3 {
-  cursor: url("cursors/lawn-mower.png"), pointer;
-}
-
-.Cursor-4 {
-  cursor: url("cursors/magnet.png"), pointer;
-}
-
-.Cursor-5 {
-  cursor: url("cursors/safety-scissors.png"), pointer;
-}
-
-.Cursor-6 {
-  cursor: url("cursors/axe.png"), pointer;
-}
-
-.Cursor-7 {
-  cursor: url("cursors/wire-cutters.png"), pointer;
-}
-
-.Cursor-8 {
-  cursor: url("cursors/lightsaber.png"), pointer;
-}
-
-.Cursor-9 {
-  cursor: url("cursors/brain.png"), pointer;
-}
-
-.Cursor-10 {
-  cursor: url("cursors/subronium.png"), pointer;
-}
-
-.UpgradeButton {
+.SectionBanner {
+  padding: 10px;
+  background-color: white;
+  border: 3px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 15px;
   color: black;
-  background: rgb(62, 222, 76);
-  background: linear-gradient(
-    90deg,
-    rgba(62, 222, 76, 1) 0%,
-    rgba(255, 254, 0, 1) 100%
-  );
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.SectionBanner-icon {
+  display: flex;
+  flex-direction: column;
+  width: 30px;
+}
+
+.SectionBanner-label {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+}
+
+.SectionBanner-name {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.SectionBanner-description {
+  font-size: 18px;
+}
+
+.SectionCard {
+  /* min-width: 300px; */
+  /* height: 90px; */
+  padding: 20px;
+  padding-right: 30px;
+  padding-top: 12.5px;
+  padding-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 10px;
+  border: 3px solid black;
+  position: relative;
+  color: black;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.SectionCard-picture {
+  width: 55px;
+  height: 55px;
+  border-radius: 100%;
+  border: 2px solid black;
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+.SectionCard-info {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.SectionCard-count {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.SectionCard-name {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.SectionCard-description {
+  font-size: 14px;
+}
+
+.SectionCard-button {
+  font-size: 14px;
+  border: 3px solid;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.SectionCard-button:active {
+  opacity: 0.8;
+}
+
+.SectionProtesters .SectionCard {
+  background-color: #ffc5c5;
+}
+
+.SectionPublicFigures .SectionCard {
+  background-color: #effff3;
+}
+
+.SectionCampuses .SectionCard {
+  background-color: #c2defb;
+}
+
+.SectionProtesters .SectionCard-button {
+  background-color: #d0021b;
+  border-color: #900404;
+}
+
+.SectionPublicFigures .SectionCard-button {
+  background-color: #00a602;
+  border-color: #036304;
+}
+
+.SectionCampuses .SectionCard-button {
+  background-color: #194dd2;
+  border-color: #01237a;
+}
+
+.SectionProtesters .SectionGutter {
+  background-image: url("backgrounds/protesters.png");
+}
+
+.SectionPublicFigures .SectionGutter {
+  background-image: url("backgrounds/public-figures.png");
+}
+
+.SectionCampuses .SectionGutter {
+  background-image: url("backgrounds/campuses.png");
+}
+
+.Footer {
+  margin-top: 35px;
+  width: 100%;
+  background-color: black;
+  padding-top: 15px;
+  padding-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 14px;
+  /* padding-bottom: 50px; */
+}
+
+a {
+  color: white !important;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
