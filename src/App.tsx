@@ -402,7 +402,6 @@ class App extends React.Component<{}, AppState> {
 
   public clearBannerPointsTint() {
     const timeDelta = Date.now() - this.lastFreedTime;
-    console.log(this.lastFreedTime);
     if (timeDelta > 250) {
       if (this.bannerPointsRef) {
         this.bannerPointsRef.style.color = "unset";
