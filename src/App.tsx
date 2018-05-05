@@ -251,10 +251,7 @@ class App extends React.Component<{}, AppState> {
   }
 
   get availableProtesters(): Protester[] {
-    if (this.currentTool.level === 0) {
-      return [];
-    }
-    return protesters.slice(0, this.currentTool.level + 1);
+    return protesters.slice(0, this.currentTool.level);
   }
 
   get availablePublicFigures() {
