@@ -89,6 +89,9 @@ interface AppState {
 }
 
 class App extends React.Component<{}, AppState> {
+  lastFreedTime = 0;
+  cheatingCount = 0;
+
   constructor(props: {}) {
     super(props);
     this.onStoneTapped = this.onStoneTapped.bind(this);
@@ -370,7 +373,17 @@ class App extends React.Component<{}, AppState> {
   }
 
   public onFree() {
+    const cheaterDelta = 35; // milliseconds
+    const timeDelta = Date.now() - this.lastFreedTime;
+    if (timeDelta <= cheaterDelta) {
+      this.cheatingCount += 1;
+      if (this.cheatingCount > 10) {
+        window.location.href = "/cheating.html";
+      }
+      return;
+    }
     this.points += this.pointsPerClick;
+    this.lastFreedTime = Date.now();
   }
 
   public render() {
