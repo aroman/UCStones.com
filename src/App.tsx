@@ -5,7 +5,7 @@ import "./App.css";
 import HandIcon from "./images/icons/hand.svg";
 import MegaphoneIcon from "./images/icons/megaphone.svg";
 import CampusIcon from "./images/icons/campus.svg";
-import UpgradeIcon from "./images/icons/upgrade.svg";
+// import UpgradeIcon from "./images/icons/upgrade.svg";
 // import MysteryIcon from "./images/icons/mystery.svg";
 
 import {
@@ -14,6 +14,7 @@ import {
   nextProtesterCost,
   publicFigures,
   campuses,
+  Tool,
   Protester,
   PublicFigure,
   Campus
@@ -91,6 +92,7 @@ interface AppState {
 class App extends React.Component<{}, AppState> {
   lastFreedTime = 0;
   cheatingCount = 0;
+  bannerPointsRef: HTMLElement | null;
 
   constructor(props: {}) {
     super(props);
@@ -137,6 +139,7 @@ class App extends React.Component<{}, AppState> {
       () => (this.points += this.pointsPerSecond * millis / 1000),
       millis
     );
+    setInterval(this.clearBannerPointsTint.bind(this), 250);
   }
 
   public getInitialState(): AppState {
@@ -224,7 +227,7 @@ class App extends React.Component<{}, AppState> {
     });
   }
 
-  get currentTool() {
+  get currentTool(): Tool {
     return tools[this.state.toolLevel];
   }
 
@@ -301,6 +304,22 @@ class App extends React.Component<{}, AppState> {
     });
   }
 
+  get toolUpgradePercent() {
+    // const prevToolStones =
+    //   this.state.toolLevel === 0
+    //     ? 0
+    //     : tools[this.state.toolLevel - 1].totalStonesNeeded;
+    // const prevToolStones = tools.reduce((sum, tool) => {
+    //   if (tool.level <= this.currentTool.level) {
+    //     return (sum += tool.totalStonesNeeded);
+    //   }
+    //   return 0;
+    // }, 0);
+    return Math.round(
+      this.state.totalStonesFreed / this.currentTool.totalStonesNeeded * 100
+    );
+  }
+
   public publicFigureScaleFactor(clickUpgrade: boolean) {
     const matchingFigures = this.activePublicFigures.filter(
       publicFigure => publicFigure.clickUpgrade === clickUpgrade
@@ -372,6 +391,22 @@ class App extends React.Component<{}, AppState> {
     });
   }
 
+  public clearBannerPointsTint() {
+    const timeDelta = Date.now() - this.lastFreedTime;
+    console.log(this.lastFreedTime);
+    if (timeDelta > 250) {
+      if (this.bannerPointsRef) {
+        this.bannerPointsRef.style.color = "unset";
+      }
+    }
+  }
+
+  public tintBannerPoints() {
+    if (this.bannerPointsRef) {
+      this.bannerPointsRef.style.color = "#26e81d";
+    }
+  }
+
   public onFree() {
     const cheaterDelta = 35; // milliseconds
     const timeDelta = Date.now() - this.lastFreedTime;
@@ -384,6 +419,7 @@ class App extends React.Component<{}, AppState> {
     }
     this.points += this.pointsPerClick;
     this.lastFreedTime = Date.now();
+    this.tintBannerPoints();
   }
 
   public render() {
@@ -392,7 +428,14 @@ class App extends React.Component<{}, AppState> {
         <div className="App-Inner">
           <div className="TopBanner">
             <div className="TopBanner-title">
-              Free stones: {numberWithCommas(Math.round(this.points))}
+              Free stones:
+              <strong
+                ref={bannerPointsRef =>
+                  (this.bannerPointsRef = bannerPointsRef)
+                }
+              >
+                {numberWithCommas(Math.round(this.points))}
+              </strong>
             </div>
             <div className="TopBanner-subtitle">
               {numberWithCommas(this.pointsPerSecond)} per second
@@ -400,28 +443,37 @@ class App extends React.Component<{}, AppState> {
           </div>
           <div className="MainStage">
             <div
-              className={`Stone Cursor-${this.state.toolLevel}`}
+              className="Stone"
               onClick={this.onStoneClicked}
-              style={{ cursor: `url(${this.currentTool.cursor}) 0 0, auto` }}
+              style={{ cursor: `url(${this.currentTool.cursor}) 0 0, pointer` }}
               onTouchEnd={this.onStoneTapped}
             />
-            <div
-              className={`ToolBox ${
-                this.toolIsUpgradable ? "ToolBoxUpgradable" : ""
-              }`}
-              onClick={this.upgradeTool}
-            >
-              <div className="ToolBox-name">{this.currentTool.name}</div>
-              <div className="ToolBox-description">
-                {this.currentTool.description}
+            <div className="ToolBoxContainer">
+              <div className="ToolBox">
+                <div className="ToolBox-name">{this.currentTool.name}</div>
+                <div className="ToolBox-description">
+                  {this.currentTool.description}
+                </div>
+                <img className="ToolBox-image" src={this.currentTool.image} />
               </div>
-              <img className="ToolBox-image" src={this.currentTool.image} />
               {this.toolIsUpgradable ? (
-                <div className="ToolBox-upgrade">
-                  <img className="ToolBox-upgrade-icon" src={UpgradeIcon} />
+                <div className="ToolBox-upgrade" onClick={this.upgradeTool}>
                   <div className="ToolBox-upgrade-label">UPGRADE</div>
                 </div>
-              ) : null}
+              ) : (
+                <div
+                  className="ToolBox-upgrade UpgradeProgress"
+                  onClick={this.upgradeTool}
+                >
+                  <div className="ToolBox-upgrade-label">
+                    {this.toolUpgradePercent}%
+                  </div>
+                  <div
+                    className="ToolBox-upgrade-bar"
+                    style={{ width: `${this.toolUpgradePercent}%` }}
+                  />
+                </div>
+              )}
             </div>
           </div>
 

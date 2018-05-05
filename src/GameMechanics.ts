@@ -5,7 +5,7 @@ interface Unlockable {
   level: number;
 }
 
-interface Tool extends Unlockable {
+export interface Tool extends Unlockable {
   cursor: string;
   rate: number;
   totalStonesNeeded: number;
@@ -131,6 +131,12 @@ export const protesters: Protester[] = [
 
 export const tools: Tool[] = [
   {
+    name: "Cursor",
+    description: "",
+    image: require("./images/tools/cursor.png"),
+    cursor: require("./images/tools/cursor-cursor.png")
+  },
+  {
     name: "Plastic knife",
     description: "Not very effective",
     image: require("./images/tools/plastic-knife.png"),
@@ -242,7 +248,7 @@ export function baseProtesterCost(level: number) {
 
 // http://cookieclicker.wikia.com/wiki/Building
 export function nextProtesterCost(protester: Protester, count: number) {
-  return protester.baseCost * 1.15 ** count;
+  return protester.baseCost * 1.16 ** count;
 }
 
 function protesterRate(level: number) {
