@@ -161,7 +161,7 @@ export const tools: Tool[] = [
     cursor: require("./images/tools/magnet-cursor.png")
   },
   {
-    name: "Diamond Pickaxe",
+    name: "Pickaxe",
     description: "(Not Enchanted)",
     image: require("./images/tools/diamond-pickaxe.png"),
     cursor: require("./images/tools/diamond-pickaxe-cursor.png")

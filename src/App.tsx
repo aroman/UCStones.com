@@ -181,7 +181,6 @@ class App extends React.Component<{}, AppState> {
   }
 
   public onStoneTapped(event: React.TouchEvent<HTMLDivElement>) {
-    console.log(event.touches);
     if (event.touches.length === 0) {
       return;
     }
@@ -194,6 +193,16 @@ class App extends React.Component<{}, AppState> {
   }
 
   public onStoneClicked(event: React.MouseEvent<HTMLDivElement>) {
+    const cheaterDelta = 35; // milliseconds
+    const timeDelta = Date.now() - this.lastFreedTime;
+    if (timeDelta <= cheaterDelta) {
+      this.cheatingCount += 1;
+      if (this.cheatingCount > 10) {
+        window.location.href = "/cheating.html";
+      }
+      return;
+    }
+    this.lastFreedTime = Date.now();
     this.onFree();
     this.pointBubbleAt(event.pageX, event.pageY, this.pointsPerClick);
   }
@@ -408,17 +417,7 @@ class App extends React.Component<{}, AppState> {
   }
 
   public onFree() {
-    const cheaterDelta = 35; // milliseconds
-    const timeDelta = Date.now() - this.lastFreedTime;
-    if (timeDelta <= cheaterDelta) {
-      this.cheatingCount += 1;
-      if (this.cheatingCount > 10) {
-        window.location.href = "/cheating.html";
-      }
-      return;
-    }
     this.points += this.pointsPerClick;
-    this.lastFreedTime = Date.now();
     this.tintBannerPoints();
   }
 
