@@ -323,9 +323,8 @@ body {
 }
 
 .ButtonDisabled {
-  opacity: 0.6;
-  cursor: auto;
-  pointer-events: none;
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .SectionCard-button:not(.ButtonDisabled):active {
