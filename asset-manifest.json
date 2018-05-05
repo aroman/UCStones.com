@@ -1,14 +1,15 @@
 {
-  "main.css": "static/css/main.06763284.css",
-  "main.css.map": "static/css/main.06763284.css.map",
-  "main.js": "static/js/main.4413c113.js",
-  "main.js.map": "static/js/main.4413c113.js.map",
+  "main.css": "static/css/main.039570e3.css",
+  "main.css.map": "static/css/main.039570e3.css.map",
+  "main.js": "static/js/main.88a0f851.js",
+  "main.js.map": "static/js/main.88a0f851.js.map",
   "static/media/112.png": "static/media/112.3dac44ae.png",
   "static/media/AEPi-brother.png": "static/media/AEPi-brother.fba9ab33.png",
   "static/media/brain.png": "static/media/brain.e30e8cae.png",
   "static/media/ca.png": "static/media/ca.a5f5159e.png",
   "static/media/campus.svg": "static/media/campus.5f620837.svg",
   "static/media/campuses.png": "static/media/campuses.d29867a8.png",
+  "static/media/cursor.png": "static/media/cursor.469e59be.png",
   "static/media/first-year.png": "static/media/first-year.eda7ebd0.png",
   "static/media/free-mason.png": "static/media/free-mason.e69d72a0.png",
   "static/media/free-stone.png": "static/media/free-stone.22900649.png",
@@ -30,6 +31,5 @@
   "static/media/the-rock.png": "static/media/the-rock.8fb344d2.png",
   "static/media/uc-rolling-stones.png": "static/media/uc-rolling-stones.91e9fff7.png",
   "static/media/uc-stoner.png": "static/media/uc-stoner.f65c90ce.png",
-  "static/media/upgrade.svg": "static/media/upgrade.91a010b2.svg",
   "static/media/wire-cutters.png": "static/media/wire-cutters.863ee029.png"
 }
