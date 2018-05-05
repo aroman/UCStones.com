@@ -1,4 +1,4 @@
-// import * as _ from "lodash";
+import { reverse, cloneDeep, includes } from "lodash";
 import * as React from "react";
 import "./App.css";
 
@@ -6,13 +6,14 @@ import HandIcon from "./images/icons/hand.svg";
 import MegaphoneIcon from "./images/icons/megaphone.svg";
 import CampusIcon from "./images/icons/campus.svg";
 import UpgradeIcon from "./images/icons/upgrade.svg";
+import MysteryIcon from "./images/icons/mystery.svg";
 
 import {
   tools,
   protesters,
   publicFigures,
   campuses,
-  toolRate
+  Protester
 } from "./GameMechanics";
 
 const numberWithCommas = (x: number) => {
@@ -28,6 +29,9 @@ interface SectionProps {
   cost: number;
   verb: string;
   image?: string;
+  doneText?: string;
+  isDisabled?: boolean;
+  onAction: () => void;
 }
 
 const SectionCard = (props: SectionProps) => {
@@ -40,9 +44,35 @@ const SectionCard = (props: SectionProps) => {
         )}
         <div className="SectionCard-name">{props.name}</div>
         <div className="SectionCard-description">{props.description}</div>
-        <div className="SectionCard-button">
+        {props.doneText ? (
+          <div className="SectionCard-button ButtonDisabled">
+            {props.doneText}
+          </div>
+        ) : (
+          <div
+            className={`SectionCard-button ${
+              props.isDisabled ? "ButtonDisabled" : ""
+            }`}
+            onClick={props.isDisabled ? void 0 : props.onAction}
+          >
+            <strong>{props.verb}</strong> (costs {numberWithCommas(props.cost)})
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const SectionMysteryCard = (props: {}) => {
+  return (
+    <div className="SectionCard SectionMysteryCard">
+      <img className="SectionCard-picture" src={MysteryIcon} />
+      <div className="SectionCard-info">
+        <div className="SectionCard-name">???</div>
+        <div className="SectionCard-description">???</div>
+        {/* <div className="SectionCard-button">
           <strong>{props.verb}</strong> (costs {props.cost})
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -51,6 +81,8 @@ const SectionCard = (props: SectionProps) => {
 interface AppState {
   stonesFreed: number;
   toolLevel: number;
+  publicFigures: number[];
+  protesters: { level: number; count: number }[];
 }
 
 class App extends React.Component<{}, AppState> {
@@ -61,8 +93,6 @@ class App extends React.Component<{}, AppState> {
 
     this.upgradeTool = this.upgradeTool.bind(this);
     this.resetState = this.resetState.bind(this);
-
-    setInterval(this.saveStateToLocalStorage.bind(this), 1000);
 
     const locallySavedState = this.getLocallySavedState();
     if (locallySavedState) {
@@ -95,12 +125,20 @@ class App extends React.Component<{}, AppState> {
   public componentDidMount() {
     this.hackToPreventDoubleTapZoom();
     window.onbeforeunload = this.saveStateToLocalStorage.bind(this);
+    setInterval(this.saveStateToLocalStorage.bind(this), 1000);
+    const millis = 100;
+    setInterval(
+      () => (this.points += this.pointsPerSecond * millis / 1000),
+      millis
+    );
   }
 
   public getInitialState(): AppState {
     return {
       stonesFreed: 0,
-      toolLevel: 0
+      toolLevel: 0,
+      publicFigures: [],
+      protesters: protesters.map(({ level }) => ({ level, count: 0 }))
     };
   }
 
@@ -112,8 +150,23 @@ class App extends React.Component<{}, AppState> {
     return null;
   }
 
-  public saveStateToLocalStorage() {
+  public saveStateToLocalStorage(): void {
     localStorage.setItem("state", JSON.stringify(this.state));
+  }
+
+  get pointsPerSecond(): number {
+    const protesterPoints = this.state.protesters
+      .map(p => {
+        const protester = protesters.find(({ level }) => level === p.level);
+        if (!protester) {
+          this.resetState();
+          throw new Error("invalid save data! resetting");
+        } else {
+          return protester.rate * p.count;
+        }
+      })
+      .reduce((n, sum) => n + sum);
+    return protesterPoints;
   }
 
   public onStoneTapped(event: React.TouchEvent<HTMLDivElement>) {
@@ -166,14 +219,82 @@ class App extends React.Component<{}, AppState> {
   }
 
   get pointsPerClick() {
-    return toolRate(this.state.toolLevel);
+    return this.currentTool.rate;
+  }
+
+  get availableProtesters(): Protester[] {
+    // const unaffordableProtesters = protesters.filter(p => p.cost > this.points);
+    // const highestProtesterLevelAvailable =
+    //   unaffordableProtesters.length > 0
+    //     ? protesters.indexOf(unaffordableProtesters[0])
+    //     : protesters.length;
+    // console.log(highestProtesterLevelAvailable);
+    return protesters.slice(0, this.currentTool.level);
+  }
+
+  public protestersOfLevel(level: number) {
+    const stat = this.state.protesters.find(p => p.level === level);
+    if (!stat) {
+      return 0;
+    }
+    return stat.count;
   }
 
   get toolIsUpgradable() {
     return (
-      this.points >= this.currentTool.upgradePoints &&
+      this.points >= this.currentTool.cost &&
       this.state.toolLevel < tools.length - 1
     );
+  }
+
+  get activePublicFigures() {
+    return this.state.publicFigures.map(level => {
+      const publicFigure = publicFigures.find(p => p.level === level);
+      if (!publicFigure) {
+        this.resetState();
+        throw new Error("invalid save data! resetting");
+      } else {
+        return publicFigure;
+      }
+    });
+  }
+
+  public adjustedProtesterCost(protster: Protester) {
+    const publicFigureScaling = this.activePublicFigures.reduce(
+      (total, publicFigure) => total * 1 - publicFigure.percent / 100,
+      1
+    );
+    return (
+      protster.cost *
+      this.protestersOfLevel(protster.level) *
+      publicFigureScaling
+    );
+  }
+
+  public addPublicFigure(level: number) {
+    const publicFigures = cloneDeep(this.state.publicFigures);
+    publicFigures.push(level);
+    this.setState({ publicFigures });
+  }
+
+  public addProtester(protester: Protester) {
+    const cost = this.adjustedProtesterCost(protester);
+    if (cost > this.points) {
+      return;
+    }
+    const protesters = cloneDeep(this.state.protesters).map(p => {
+      if (protester.level === p.level) {
+        return {
+          ...p,
+          level: p.level,
+          count: p.count + 1
+        };
+      }
+      return p;
+    });
+
+    this.points -= cost;
+    this.setState({ protesters });
   }
 
   public upgradeTool() {
@@ -190,15 +311,18 @@ class App extends React.Component<{}, AppState> {
   }
 
   public render() {
-    console.log(this.toolIsUpgradable, this.points);
-    console.log(`url(${this.currentTool.image}) 0 0, auto`);
+    const showProtesters = this.currentTool.level >= 2;
+    const showPublicFigures = this.currentTool.level >= 4;
+    const showCampuses = this.currentTool.level >= 6;
     return (
       <div className="App">
         <div className="TopBanner" onClick={this.resetState}>
           <div className="TopBanner-title">
             Stones freed: {numberWithCommas(Math.round(this.state.stonesFreed))}
           </div>
-          <div className="TopBanner-subtitle">45,000 per second</div>
+          <div className="TopBanner-subtitle">
+            {this.pointsPerSecond} per second
+          </div>
         </div>
         <div className="MainStage">
           <div
@@ -228,31 +352,41 @@ class App extends React.Component<{}, AppState> {
         </div>
 
         <div className="Sections">
-          <div className="Section SectionProtesters">
-            <div className="SectionBanner">
-              <img className="SectionBanner-icon" src={HandIcon} />
-              <div className="SectionBanner-label">
-                <div className="SectionBanner-name">Protesters</div>
-                <div className="SectionBanner-description">
-                  Set stones free periodically
+          {showProtesters ? (
+            <div className="Section SectionProtesters">
+              <div className="SectionBanner">
+                <img className="SectionBanner-icon" src={HandIcon} />
+                <div className="SectionBanner-label">
+                  <div className="SectionBanner-name">Protesters</div>
+                  <div className="SectionBanner-description">
+                    Set stones free periodically
+                  </div>
                 </div>
               </div>
+              <div className="SectionGutter">
+                {this.availableProtesters
+                  .reverse()
+                  .map(protester => (
+                    <SectionCard
+                      count={this.protestersOfLevel(protester.level)}
+                      name={protester.name}
+                      description={`Frees ${numberWithCommas(
+                        protester.rate
+                      )} stones/sec`}
+                      cost={this.adjustedProtesterCost(protester)}
+                      verb={"HIRE"}
+                      isDisabled={
+                        this.adjustedProtesterCost(protester) > this.points
+                      }
+                      onAction={() => this.addProtester(protester)}
+                      image={protester.image}
+                    />
+                  ))}
+              </div>
             </div>
-            <div className="SectionGutter">
-              {protesters.map(protester => (
-                <SectionCard
-                  count={0}
-                  name={protester.name}
-                  description={protester.description}
-                  cost={protester.cost}
-                  verb={"HIRE"}
-                  image={protester.image}
-                />
-              ))}
-            </div>
-          </div>
+          ) : null}
 
-          <div className="Sections">
+          {showPublicFigures ? (
             <div className="Section SectionPublicFigures">
               <div className="SectionBanner">
                 <img className="SectionBanner-icon" src={MegaphoneIcon} />
@@ -264,20 +398,34 @@ class App extends React.Component<{}, AppState> {
                 </div>
               </div>
               <div className="SectionGutter">
-                {publicFigures.map(publicFigure => (
-                  <SectionCard
-                    name={publicFigure.name}
-                    description={publicFigure.description}
-                    cost={publicFigure.cost}
-                    verb={"LOBBY"}
-                    image={publicFigure.image}
-                  />
-                ))}
+                {reverse(publicFigures.slice()).map(
+                  (publicFigure, level) =>
+                    this.points > publicFigure.cost ? (
+                      <SectionCard
+                        name={publicFigure.name}
+                        description={`Protesters cost ${
+                          publicFigure.percent
+                        }% less`}
+                        cost={publicFigure.cost}
+                        verb={"CONVINCE"}
+                        image={publicFigure.image}
+                        isDisabled={publicFigure.cost > this.points}
+                        onAction={() => this.addPublicFigure(level)}
+                        doneText={
+                          includes(this.state.publicFigures, level)
+                            ? "CONVINCED!"
+                            : undefined
+                        }
+                      />
+                    ) : (
+                      <SectionMysteryCard />
+                    )
+                )}
               </div>
             </div>
-          </div>
+          ) : null}
 
-          <div className="Sections">
+          {showCampuses ? (
             <div className="Section SectionCampuses">
               <div className="SectionBanner">
                 <img className="SectionBanner-icon" src={CampusIcon} />
@@ -289,18 +437,20 @@ class App extends React.Component<{}, AppState> {
                 </div>
               </div>
               <div className="SectionGutter">
-                {campuses.map(campus => (
+                {reverse(campuses.slice()).map(campus => (
                   <SectionCard
                     name={campus.name}
                     description={campus.description}
                     cost={campus.cost}
                     verb={"EXPAND"}
                     image={campus.image}
+                    onAction={() => this.addPublicFigure(0)}
+                    doneText={"EXPANDED!"}
                   />
                 ))}
               </div>
             </div>
-          </div>
+          ) : null}
         </div>
 
         <div className="Footer">

@@ -23,8 +23,8 @@ body {
     #dd00f3,
     #dd00f3
   );
-  /* background-size: 1200% 1200%;
-  animation: rainbow 18s ease infinite;  */
+  /* background-size: 100vw 100vh; */
+  /* animation: rainbow 1s ease infinite; */
 }
 
 .App {
@@ -39,6 +39,7 @@ body {
   color: white;
   font-size: 18px;
   user-select: none;
+  min-height: 100vh;
 }
 
 .TopBanner {
@@ -73,9 +74,11 @@ body {
 }
 
 .MainStage {
+  flex: 1 0 auto;
   display: flex;
   align-items: center;
-  margin-bottom: 25px;
+  margin-top: 7.5vh;
+  margin-bottom: 7.5vh;
 }
 
 .Stone {
@@ -316,7 +319,13 @@ body {
   cursor: pointer;
 }
 
-.SectionCard-button:active {
+.ButtonDisabled {
+  opacity: 0.6;
+  cursor: auto;
+  pointer-events: none;
+}
+
+.SectionCard-button:not(.ButtonDisabled):active {
   opacity: 0.8;
 }
 
@@ -359,7 +368,13 @@ body {
   background-image: url("images/textures/campuses.png");
 }
 
+.SectionMysteryCard .SectionCard-picture {
+  /* width: 32px;
+  height: 32px; */
+}
+
 .Footer {
+  flex-shrink: 0;
   margin-top: 35px;
   width: 100%;
   background-color: black;

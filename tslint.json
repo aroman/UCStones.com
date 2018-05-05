@@ -3,7 +3,8 @@
   "rules": {
     "interface-name": false,
     "ordered-imports": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "jsx-no-lambda": false
   },
   "linterOptions": {
     "exclude": ["config/**/*.js", "node_modules/**/*.ts"]
