@@ -150,7 +150,7 @@ class App extends React.Component<{}, AppState> {
   }
 
   public getLocallySavedState(): AppState | null {
-    const locallySavedState = localStorage.getItem("state");
+    const locallySavedState = localStorage.getItem("app-state");
     if (locallySavedState) {
       return JSON.parse(locallySavedState) as AppState;
     }
@@ -158,7 +158,7 @@ class App extends React.Component<{}, AppState> {
   }
 
   public saveStateToLocalStorage(): void {
-    localStorage.setItem("state", JSON.stringify(this.state));
+    localStorage.setItem("app-state", JSON.stringify(this.state));
   }
 
   get pointsPerSecond(): number {
