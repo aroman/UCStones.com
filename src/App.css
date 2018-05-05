@@ -83,10 +83,10 @@ body {
   width: 180px;
   height: 180px;
   box-shadow: 0 0 25px 10px white;
-  background-image: url("stone.png");
+  background-image: url("images/stone.png");
   background-size: cover;
   animation: pulsate 1s ease-in-out infinite alternate;
-  cursor: pointer;
+  /* cursor: pointer; */
   touch-action: manipulation;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -107,14 +107,14 @@ body {
   border: 3px solid white;
   border-radius: 10px;
   background-image: radial-gradient(
-    closest-corner at 50% 65%,
+    closest-corner at 50% 55%,
     #aaa9a9 0%,
     black 100%
   );
 }
 
 .ToolBox-image {
-  height: 64px;
+  height: 96px;
 }
 
 .ToolBox-name {
@@ -124,8 +124,8 @@ body {
 }
 
 .ToolBoxUpgradable .ToolBox-image {
-  margin-top: -5px;
-  margin-bottom: 5px;
+  /* margin-top: -5px; */
+  /* margin-bottom: 5px; */
   height: 64px;
 }
 
@@ -153,11 +153,13 @@ body {
   font-size: 14px;
   width: 100%;
   background-color: #ffb130;
-  margin-bottom: -5px;
-  padding-bottom: 5px;
+  margin-top: 14px;
+  margin-bottom: -12px;
+  /* padding-bottom: 5px; */
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   padding: 5px;
+  padding-top: 8px;
 }
 
 .ToolBox-upgrade-icon {
@@ -220,6 +222,8 @@ body {
 
 .SectionBanner {
   padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
   background-color: white;
   border: 3px solid black;
   display: flex;
@@ -295,6 +299,7 @@ body {
 .SectionCard-name {
   font-weight: bold;
   font-size: 18px;
+  margin-right: 20px;
 }
 
 .SectionCard-description {
@@ -343,15 +348,15 @@ body {
 }
 
 .SectionProtesters .SectionGutter {
-  background-image: url("backgrounds/protesters.png");
+  background-image: url("images/textures/protesters.png");
 }
 
 .SectionPublicFigures .SectionGutter {
-  background-image: url("backgrounds/public-figures.png");
+  background-image: url("images/textures/public-figures.png");
 }
 
 .SectionCampuses .SectionGutter {
-  background-image: url("backgrounds/campuses.png");
+  background-image: url("images/textures/campuses.png");
 }
 
 .Footer {

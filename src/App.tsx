@@ -2,12 +2,18 @@
 import * as React from "react";
 import "./App.css";
 
-import HandIcon from "./icons/hand.svg";
-import MegaphoneIcon from "./icons/megaphone.svg";
-import CampusIcon from "./icons/campus.svg";
-import UpgradeIcon from "./icons/upgrade.svg";
+import HandIcon from "./images/icons/hand.svg";
+import MegaphoneIcon from "./images/icons/megaphone.svg";
+import CampusIcon from "./images/icons/campus.svg";
+import UpgradeIcon from "./images/icons/upgrade.svg";
 
-import { tools, protesters, publicFigures, campuses } from "./GameMechanics";
+import {
+  tools,
+  protesters,
+  publicFigures,
+  campuses,
+  toolRate
+} from "./GameMechanics";
 
 const numberWithCommas = (x: number) => {
   return Math.round(x)
@@ -44,9 +50,6 @@ const SectionCard = (props: SectionProps) => {
 
 interface AppState {
   stonesFreed: number;
-  liberatorCount: number;
-  liberatorLevel: number;
-  toolCount: number;
   toolLevel: number;
 }
 
@@ -56,7 +59,6 @@ class App extends React.Component<{}, AppState> {
     this.onStoneTapped = this.onStoneTapped.bind(this);
     this.onStoneClicked = this.onStoneClicked.bind(this);
 
-    this.upgradeLiberator = this.upgradeLiberator.bind(this);
     this.upgradeTool = this.upgradeTool.bind(this);
     this.resetState = this.resetState.bind(this);
 
@@ -70,7 +72,7 @@ class App extends React.Component<{}, AppState> {
     }
   }
 
-  public componentDidMount() {
+  public hackToPreventDoubleTapZoom() {
     let lastTouchEnd = 0;
     document.addEventListener(
       "touchend",
@@ -88,19 +90,17 @@ class App extends React.Component<{}, AppState> {
       },
       false
     );
-    // (window.document.querySelector(
-    //   ".Stone"
-    // )! as HTMLElement).onclick = this.onStoneTapped.bind(this);
+  }
+
+  public componentDidMount() {
+    this.hackToPreventDoubleTapZoom();
     window.onbeforeunload = this.saveStateToLocalStorage.bind(this);
   }
 
   public getInitialState(): AppState {
     return {
       stonesFreed: 0,
-      toolCount: 1,
-      toolLevel: 0,
-      liberatorLevel: 0,
-      liberatorCount: 0
+      toolLevel: 0
     };
   }
 
@@ -125,13 +125,13 @@ class App extends React.Component<{}, AppState> {
     this.pointBubbleAt(
       event.touches[0].clientX,
       event.touches[0].clientY,
-      this.state.toolCount
+      this.pointsPerClick
     );
   }
 
   public onStoneClicked(event: React.MouseEvent<HTMLDivElement>) {
     this.onFree();
-    this.pointBubbleAt(event.clientX, event.clientY, this.state.toolCount);
+    this.pointBubbleAt(event.clientX, event.clientY, this.pointsPerClick);
   }
 
   public pointBubbleAt(x: number, y: number, value: number) {
@@ -151,6 +151,10 @@ class App extends React.Component<{}, AppState> {
     return this.state.stonesFreed;
   }
 
+  set points(points: number) {
+    this.setState({ stonesFreed: points });
+  }
+
   get currentTool() {
     return tools[this.state.toolLevel];
   }
@@ -161,13 +165,13 @@ class App extends React.Component<{}, AppState> {
     }
   }
 
-  public setStonesFreed(stonesFreed: number) {
-    this.setState({ stonesFreed });
+  get pointsPerClick() {
+    return toolRate(this.state.toolLevel);
   }
 
   get toolIsUpgradable() {
     return (
-      this.points < this.currentTool.upgradePoints &&
+      this.points >= this.currentTool.upgradePoints &&
       this.state.toolLevel < tools.length - 1
     );
   }
@@ -177,30 +181,17 @@ class App extends React.Component<{}, AppState> {
       return;
     }
     this.setState({
-      toolLevel: this.state.toolLevel + 1,
-      toolCount: 1
-    });
-  }
-
-  public upgradeLiberator() {
-    this.setState({
-      liberatorLevel: this.state.liberatorLevel + 1,
-      liberatorCount: 0
+      toolLevel: this.state.toolLevel + 1
     });
   }
 
   public onFree() {
-    this.setStonesFreed(this.state.stonesFreed);
+    this.points += this.pointsPerClick;
   }
 
-  // public buyTool() {
-  //   this.setState({
-  //     stonesFreed: this.state.stonesFreed - this.toolCost,
-  //     toolCount: this.state.toolCount + 1
-  //   });
-  // }
-
   public render() {
+    console.log(this.toolIsUpgradable, this.points);
+    console.log(`url(${this.currentTool.image}) 0 0, auto`);
     return (
       <div className="App">
         <div className="TopBanner" onClick={this.resetState}>
@@ -213,6 +204,7 @@ class App extends React.Component<{}, AppState> {
           <div
             className={`Stone Cursor-${this.state.toolLevel}`}
             onClick={this.onStoneClicked}
+            style={{ cursor: `url(${this.currentTool.cursor}) 0 0, auto` }}
             onTouchEnd={this.onStoneTapped}
           />
           <div
@@ -277,7 +269,7 @@ class App extends React.Component<{}, AppState> {
                     name={publicFigure.name}
                     description={publicFigure.description}
                     cost={publicFigure.cost}
-                    verb={"CONVINCE"}
+                    verb={"LOBBY"}
                     image={publicFigure.image}
                   />
                 ))}
