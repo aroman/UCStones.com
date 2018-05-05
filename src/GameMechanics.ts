@@ -138,43 +138,49 @@ export const tools: Tool[] = [
   },
   {
     name: "Nail file",
-    description: "Not very effective",
+    description: "At least it's metal",
     image: require("./images/tools/nail-file.png"),
     cursor: require("./images/tools/nail-file-cursor.png")
   },
   {
     name: "Scissors",
-    description: "Not very effective",
+    description: "Useful on the cut",
     image: require("./images/tools/scissors.png"),
     cursor: require("./images/tools/scissors-cursor.png")
   },
   {
     name: "Magnets?",
-    description: "Not very effective",
+    description: "???",
     image: require("./images/tools/magnet.png"),
     cursor: require("./images/tools/magnet-cursor.png")
   },
   {
+    name: "Diamond Pickaxe",
+    description: "(Not Enchanted)",
+    image: require("./images/tools/diamond-pickaxe.png"),
+    cursor: require("./images/tools/diamond-pickaxe-cursor.png")
+  },
+  {
     name: "Wire Cutters",
-    description: "Not very effective",
+    description: "Thanks ECEs!",
     image: require("./images/tools/wire-cutters.png"),
     cursor: require("./images/tools/wire-cutters-cursor.png")
   },
   {
     name: "Lightsaber",
-    description: "Not very effective",
+    description: "Use the force",
     image: require("./images/tools/lightsaber.png"),
     cursor: require("./images/tools/lightsaber-cursor.png")
   },
   {
     name: "Telekinesis",
-    description: "Not very effective",
+    description: "The other CS major",
     image: require("./images/tools/brain.png"),
     cursor: require("./images/tools/brain-cursor.png")
   },
   {
     name: "Subronium",
-    description: "Not very effective",
+    description: "HOLY $#!+",
     image: require("./images/tools/subronium.png"),
     cursor: require("./images/tools/subronium-cursor.png")
   }
