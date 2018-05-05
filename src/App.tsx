@@ -48,9 +48,7 @@ const SectionCard = (props: SectionProps) => {
         <div className="SectionCard-name">{props.name}</div>
         <div className="SectionCard-description">{props.description}</div>
         {props.doneText ? (
-          <div className="SectionCard-button ButtonDisabled">
-            {props.doneText}
-          </div>
+          <div className="">{props.doneText}</div>
         ) : (
           <div
             className={`SectionCard-button ${
@@ -331,12 +329,14 @@ class App extends React.Component<{}, AppState> {
   public addPublicFigure(publicFigure: PublicFigure) {
     const publicFigures = cloneDeep(this.state.publicFigures);
     publicFigures.push(publicFigure.level);
+    this.points -= publicFigure.cost;
     this.setState({ publicFigures });
   }
 
   public addCampus(campus: Campus) {
     const campuses = cloneDeep(this.state.campuses);
     campuses.push(campus.level);
+    this.points -= campus.cost;
     this.setState({ campuses });
   }
 

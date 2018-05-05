@@ -215,8 +215,8 @@ export const campuses: Campus[] = [
 ].map((p, level) => ({
   ...p,
   level,
-  cost: 7 ** (level + 3),
-  totalStonesNeeded: 12 ** (level + 4.5)
+  cost: 8 ** (level + 7),
+  totalStonesNeeded: 7 ** (level + 6)
 }));
 
 function factorial(n: number) {
