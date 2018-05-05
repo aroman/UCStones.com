@@ -2,115 +2,130 @@ interface Unlockable {
   name: string;
   description: string;
   image: string;
-  cost: number;
   level: number;
 }
 
 interface Tool extends Unlockable {
   cursor: string;
   rate: number;
+  totalStonesNeeded: number;
 }
 
 export interface Protester extends Unlockable {
+  baseCost: number;
   rate: number;
 }
 
-interface PublicFigure extends Unlockable {
+export interface PublicFigure extends Unlockable {
   percent: number;
+  totalStonesNeeded: number;
+  cost: number;
+  clickUpgrade: boolean;
 }
 
-interface Campus extends Unlockable {
-  multiplier: number;
+export interface Campus extends Unlockable {
+  totalStonesNeeded: number;
+  cost: number;
 }
 
 export const publicFigures: PublicFigure[] = [
   {
     name: "UC Stoners",
-    description: "adnajsdjkansdadsas",
-    image: require("./images/protesters/112.png")
+    clickUpgrade: true,
+    percent: 1.5,
+    image: require("./images/public-figures/uc-stoner.png")
   },
   {
     name: "UC Kidney Stones",
-    description: "adnajsdjkansd",
-    image: require("./images/protesters/112.png")
+    clickUpgrade: true,
+    percent: 2,
+    image: require("./images/public-figures/uc-kidney-stone.png")
   },
   {
     name: "UC Rolling Stones",
-    description: "adnajsdjkansd",
-    image: require("./images/protesters/112.png")
+    clickUpgrade: false,
+    percent: 0.95,
+    image: require("./images/public-figures/uc-rolling-stones.png")
   },
   {
     name: "Indiana UC Stones",
-    description: "adnajsdjkansd",
-    image: require("./images/protesters/112.png")
+    clickUpgrade: true,
+    percent: 2.5,
+    image: require("./images/public-figures/indiana-jones.png")
   },
   {
     name: "The Artist Formerly Known as The UC Stones",
-    description: "Foo",
-    image: require("./images/protesters/112.png")
+    clickUpgrade: false,
+    percent: 0.9,
+    image: require("./images/public-figures/prince.png")
   },
   {
     name: "UC Stone Cold Steve Austin",
-    description: "Foo",
-    image: require("./images/protesters/112.png")
+    clickUpgrade: true,
+    percent: 5,
+    image: require("./images/public-figures/steve-austin.png")
   },
   {
     name: "Dwayne “The UC Stones” Johnson",
-    description: "Foo",
-    image: require("./images/protesters/112.png")
+    clickUpgrade: false,
+    percent: 0.75,
+    image: require("./images/public-figures/the-rock.png")
   }
 ].map((p, level) => ({
   ...p,
   level,
-  cost: 100 * level,
-  percent: 2 * level
+  cost: 7 ** (level + 5),
+  totalStonesNeeded: 14 ** (level + 3),
+  description: p.clickUpgrade
+    ? `Your clicks free ${p.percent}X more stones`
+    : `Protesters cost ${Math.round((1 - p.percent) * 100)}% less`
 }));
 
 export const protesters: Protester[] = [
   {
-    name: "112 TAs",
+    name: "112 TA",
     description: "Blue-hooded stone freers",
     image: require("./images/protesters/112.png")
   },
   {
-    name: '"First Years"',
+    name: '"First Year"',
     description: "foo",
-    image: require("./images/protesters/112.png")
+    image: require("./images/protesters/first-year.png")
   },
   {
-    name: "Super Seniors",
+    name: "Super Senior",
     description: "foo",
-    image: require("./images/protesters/112.png")
+    image: require("./images/protesters/super-senior.png")
   },
   {
-    name: "AEPi Brothers",
+    name: "AEPi Brother",
     description: "foo",
-    image: require("./images/protesters/112.png")
+    image: require("./images/protesters/AEPi-brother.png")
   },
   {
-    name: "The Spicy Teens",
+    name: "One Spicy Teen",
     description: "foo",
-    image: require("./images/protesters/112.png")
+    image: require("./images/protesters/spicy-teen.png")
   },
   {
-    name: "Free Masons",
+    name: "Free Mason",
     description: "foo",
-    image: require("./images/protesters/112.png")
+    image: require("./images/protesters/free-mason.png")
   },
   {
-    name: "Already Free Stones",
+    name: "An Already Free Stone",
     description: "foo",
-    image: require("./images/protesters/112.png")
+    image: require("./images/protesters/free-stone.png")
   },
   {
-    name: "Geology Majors",
+    name: "Geology Major",
     description: "foo",
-    image: require("./images/protesters/112.png")
+    image: require("./images/protesters/geology-major.png")
   }
 ].map((p, level) => ({
   ...p,
   level,
-  cost: protesterCost(level),
+  baseCost: baseProtesterCost(level),
   rate: protesterRate(level)
 }));
 
@@ -166,47 +181,36 @@ export const tools: Tool[] = [
 ].map((p, level) => ({
   ...p,
   level,
-  cost: toolCost(level),
+  totalStonesNeeded: stonedNeededForTool(level),
   rate: toolRate(level)
 }));
 
 export const campuses: Campus[] = [
   {
-    name: "Carnegie Mellon University",
-    description: "abc",
-    image: require("./images/tools/subronium.png")
+    name: "CMU Silicon Valley",
+    description: "Protesters free stones at 2X normal speed",
+    image: require("./images/campuses/ca.png")
   },
   {
     name: "CMU Qatar",
-    description: "abc",
-    image: require("./images/tools/subronium.png")
-  },
-  {
-    name: "CMU Rwanda",
-    description: "abc",
-    image: require("./images/tools/subronium.png")
-  },
-  {
-    name: "CMU Silicon Valley",
-    description: "abc",
-    image: require("./images/tools/subronium.png")
+    description: "Each protester increases stones freed per click",
+    image: require("./images/campuses/qatar.png")
   },
   {
     name: "Central Michigan University",
-    description: "abc",
-    image: require("./images/tools/subronium.png")
+    description: "Protesters free stones at 4X normal speed",
+    image: require("./images/campuses/cmu.png")
   },
   {
     name: "Nanyang Technological University Singapore",
-    description: "abc",
-    image: require("./images/tools/subronium.png")
+    description: "Subronium frees 10X stones per click",
+    image: require("./images/campuses/nanyang.png")
   }
 ].map((p, level) => ({
   ...p,
   level,
-  multiplier: 1,
-  cost: toolCost(level),
-  rate: toolRate(level)
+  cost: 7 ** (level + 3),
+  totalStonesNeeded: 12 ** (level + 4.5)
 }));
 
 function factorial(n: number) {
@@ -226,18 +230,23 @@ export function indexForItem(itemName: string, items: string[]) {
   return index;
 }
 
-function protesterCost(level: number) {
+export function baseProtesterCost(level: number) {
   return 10 ** (level + 1);
+}
+
+// http://cookieclicker.wikia.com/wiki/Building
+export function nextProtesterCost(protester: Protester, count: number) {
+  return protester.baseCost * 1.15 ** count;
 }
 
 function protesterRate(level: number) {
-  return 2 * factorial(level + 1);
+  return 4.35 * factorial(level + 1);
 }
 
-function toolCost(level: number) {
-  return 10 ** (level + 1);
+function stonedNeededForTool(level: number) {
+  return 12 ** (level + 1);
 }
 
 function toolRate(level: number) {
-  return level === 0 ? 1 : 2 * factorial(level + 1);
+  return level < 3 ? (level + 1) ** 2 : 2 * factorial(level + 1);
 }
