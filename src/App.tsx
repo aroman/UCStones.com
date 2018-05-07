@@ -445,13 +445,13 @@ class App extends React.Component<{}, AppState> {
       <div className="App">
         <div className="App-Inner">
           <div className="TopBanner">
-            {this.isConnected ? (
+            {this.isConnected && this.state.playersOnline ? (
               <div className="TopBanner-right">
                 Players online:
                 <strong>
                   {numberWithCommas(
                     Math.round(
-                      this.state.playersOnline ? this.state.playersOnline : 0
+                      this.state.playersOnline
                     )
                   )}
                 </strong>
