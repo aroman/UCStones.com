@@ -246,7 +246,7 @@ export const campuses: Campus[] = [
   },
   {
     name: "Nanyang Technological University Singapore",
-    description: "Subronium frees 8X stones per click",
+    description: "Your clicks free 8X stones per click",
     image: require("./images/campuses/nanyang.png"),
     minLevel: 9
   }
@@ -288,7 +288,7 @@ function protesterRate(level: number) {
 }
 
 function stonedNeededForTool(level: number) {
-  if (level > toolsRaw.length - 2) {
+  if (level > toolsRaw.length - 3) {
     return 15 ** (level + 1);
   }
   return 12 ** (level + 1);
