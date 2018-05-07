@@ -90,7 +90,7 @@ interface AppState {
 }
 
 class App extends React.Component<{}, AppState> {
-  readonly rollingAverageWindow = 3000;
+  readonly rollingAverageWindow = 1000;
   clicksInRollingWindow = 0;
   lastFreedTime = 0;
   bannerPointsRef: HTMLElement | null;
@@ -141,7 +141,14 @@ class App extends React.Component<{}, AppState> {
       millis
     );
     setInterval(this.clearBannerPointsTint.bind(this), 250);
-    setInterval(this.detectCheater.bind(this), this.rollingAverageWindow);
+    // Don't check  check cheaters on mobile
+    if (
+      !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    ) {
+      setInterval(this.detectCheater.bind(this), this.rollingAverageWindow);
+    }
   }
 
   public getInitialState(): AppState {
