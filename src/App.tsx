@@ -449,7 +449,11 @@ class App extends React.Component<{}, AppState> {
               <div className="TopBanner-right">
                 Players online:
                 <strong>
-                  {numberWithCommas(Math.round(this.state.playersOnline))}
+                  {numberWithCommas(
+                    Math.round(
+                      this.state.playersOnline ? this.state.playersOnline : 0
+                    )
+                  )}
                 </strong>
               </div>
             ) : null}
