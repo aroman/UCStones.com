@@ -74,13 +74,19 @@ body {
   justify-content: flex-start;
 }
 
-.TopBanner-title strong {
+.TopBanner strong {
   margin-left: 5px;
 }
 
 .TopBanner-subtitle {
   margin-top: 2px;
   font-size: 18px;
+}
+
+.TopBanner-right {
+  float: right;
+  margin-right: 40px;
+  font-size: 16px;
 }
 
 .InnerBanner {

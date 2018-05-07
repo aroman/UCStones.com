@@ -1,5 +1,6 @@
 import { cloneDeep, includes } from "lodash";
 import * as React from "react";
+import * as io from "socket.io-client";
 import "./App.css";
 
 import HandIcon from "./images/icons/hand.svg";
@@ -88,6 +89,7 @@ interface AppState {
   publicFigures: number[];
   campuses: number[];
   protesters: { level: number; count: number }[];
+  playersOnline: number;
 }
 
 class App extends React.Component<{}, AppState> {
@@ -95,6 +97,8 @@ class App extends React.Component<{}, AppState> {
   clicksInRollingWindow = 0;
   lastFreedTime = 0;
   bannerPointsRef: HTMLElement | null;
+  socket: SocketIOClient.Socket;
+  isConnected = false;
 
   constructor(props: {}) {
     super(props);
@@ -150,6 +154,17 @@ class App extends React.Component<{}, AppState> {
     ) {
       setInterval(this.detectCheater.bind(this), this.rollingAverageWindow);
     }
+    this.socket = io("https://liberation.ucstones.com");
+    // this.socket = io("http://localhost:9000");
+    this.socket.on("playersOnline", (playersOnline: number) =>
+      this.setState({ playersOnline })
+    );
+    this.socket.on("connect", () => {
+      this.isConnected = true;
+    });
+    this.socket.on("disconnect", () => {
+      this.isConnected = false;
+    });
   }
 
   public getInitialState(): AppState {
@@ -159,7 +174,8 @@ class App extends React.Component<{}, AppState> {
       toolLevel: 0,
       publicFigures: [],
       campuses: [],
-      protesters: protesters.map(({ level }) => ({ level, count: 0 }))
+      protesters: protesters.map(({ level }) => ({ level, count: 0 })),
+      playersOnline: 0
     };
   }
 
@@ -429,6 +445,14 @@ class App extends React.Component<{}, AppState> {
       <div className="App">
         <div className="App-Inner">
           <div className="TopBanner">
+            {this.isConnected ? (
+              <div className="TopBanner-right">
+                Players online:
+                <strong>
+                  {numberWithCommas(Math.round(this.state.playersOnline))}
+                </strong>
+              </div>
+            ) : null}
             <div className="TopBanner-title">
               Free stones:
               <strong
@@ -439,6 +463,7 @@ class App extends React.Component<{}, AppState> {
                 {numberWithCommas(Math.round(this.points))}
               </strong>
             </div>
+
             <div className="TopBanner-subtitle">
               {numberWithCommas(this.pointsPerSecond)} per second
             </div>
