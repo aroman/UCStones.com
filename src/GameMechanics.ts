@@ -44,7 +44,7 @@ export const publicFigures: PublicFigure[] = [
   {
     name: "UC Rolling Stones",
     clickUpgrade: false,
-    percent: 0.95,
+    percent: 0.9,
     image: require("./images/public-figures/uc-rolling-stones.png")
   },
   {
@@ -62,7 +62,7 @@ export const publicFigures: PublicFigure[] = [
   {
     name: "UC Stone Cold Steve Austin",
     clickUpgrade: true,
-    percent: 5,
+    percent: 2,
     image: require("./images/public-figures/steve-austin.png")
   },
   {
@@ -129,7 +129,7 @@ export const protesters: Protester[] = [
   rate: protesterRate(level)
 }));
 
-export const tools: Tool[] = [
+const toolsRaw = [
   {
     name: "Cursor",
     description: "",
@@ -190,7 +190,20 @@ export const tools: Tool[] = [
     image: require("./images/tools/subronium.png"),
     cursor: require("./images/tools/subronium-cursor.png")
   }
-].map((p, level) => ({
+];
+
+const enchantedPickaxe = {
+  name: "Pickaxe",
+  description: "(Enchanted)",
+  image: require("./images/tools/diamond-pickaxe-enchanted.png"),
+  cursor: require("./images/tools/diamond-pickaxe-enchanted-cursor.png")
+};
+
+if (Math.random() > 0.5) {
+  toolsRaw.splice(5, 1, enchantedPickaxe);
+}
+
+export const tools: Tool[] = toolsRaw.map((p, level) => ({
   ...p,
   level,
   totalStonesNeeded: stonedNeededForTool(level),
@@ -215,7 +228,7 @@ export const campuses: Campus[] = [
   },
   {
     name: "Nanyang Technological University Singapore",
-    description: "Subronium frees 10X stones per click",
+    description: "Subronium frees 9X stones per click",
     image: require("./images/campuses/nanyang.png")
   }
 ].map((p, level) => ({
@@ -256,6 +269,9 @@ function protesterRate(level: number) {
 }
 
 function stonedNeededForTool(level: number) {
+  if (level > toolsRaw.length - 2) {
+    return 15 ** (level + 1);
+  }
   return 12 ** (level + 1);
 }
 

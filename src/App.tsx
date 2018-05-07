@@ -90,8 +90,9 @@ interface AppState {
 }
 
 class App extends React.Component<{}, AppState> {
+  readonly rollingAverageWindow = 3000;
+  clicksInRollingWindow = 0;
   lastFreedTime = 0;
-  cheatingCount = 0;
   bannerPointsRef: HTMLElement | null;
 
   constructor(props: {}) {
@@ -140,6 +141,7 @@ class App extends React.Component<{}, AppState> {
       millis
     );
     setInterval(this.clearBannerPointsTint.bind(this), 250);
+    setInterval(this.detectCheater.bind(this), this.rollingAverageWindow);
   }
 
   public getInitialState(): AppState {
@@ -192,17 +194,19 @@ class App extends React.Component<{}, AppState> {
     );
   }
 
-  public onStoneClicked(event: React.MouseEvent<HTMLDivElement>) {
-    const cheaterDelta = 35; // milliseconds
-    const timeDelta = Date.now() - this.lastFreedTime;
-    if (timeDelta <= cheaterDelta) {
-      this.cheatingCount += 1;
-      if (this.cheatingCount > 10) {
-        window.location.href = "/cheating.html";
-      }
-      return;
+  public detectCheater() {
+    const windowScale = this.rollingAverageWindow / 1000;
+    const meanClickSpeed =
+      this.rollingAverageWindow * windowScale / this.clicksInRollingWindow;
+    console.log(meanClickSpeed);
+    if (meanClickSpeed < 50) {
+      window.location.href = "/cheating.html";
     }
-    this.lastFreedTime = Date.now();
+    this.clicksInRollingWindow = 0;
+  }
+
+  public onStoneClicked(event: React.MouseEvent<HTMLDivElement>) {
+    this.clicksInRollingWindow += 1;
     this.onFree();
     this.pointBubbleAt(event.pageX, event.pageY, this.pointsPerClick);
   }
@@ -253,8 +257,8 @@ class App extends React.Component<{}, AppState> {
       0
     );
     const CMUQatarMultiplier =
-      this.state.campuses.indexOf(1) === -1 ? 1 : numberOfProtesters / 25;
-    const SubroniumMultiplier = this.state.campuses.indexOf(3) === -1 ? 1 : 10;
+      this.state.campuses.indexOf(1) === -1 ? 1 : 1 + numberOfProtesters / 500;
+    const SubroniumMultiplier = this.state.campuses.indexOf(3) === -1 ? 1 : 9;
     return (
       this.currentTool.rate *
       this.publicFigureScaleFactor(true) *
@@ -273,7 +277,7 @@ class App extends React.Component<{}, AppState> {
     }
     return publicFigures.filter(
       publicFigure =>
-        this.state.totalStonesFreed >= publicFigure.totalStonesNeeded
+        this.state.totalStonesFreed >= 0.5 * publicFigure.totalStonesNeeded
     );
   }
 
@@ -282,7 +286,7 @@ class App extends React.Component<{}, AppState> {
       return [];
     }
     return campuses.filter(
-      campus => this.state.totalStonesFreed >= campus.totalStonesNeeded
+      campus => this.state.totalStonesFreed >= 0.5 * campus.totalStonesNeeded
     );
   }
 
@@ -324,8 +328,11 @@ class App extends React.Component<{}, AppState> {
     //   }
     //   return 0;
     // }, 0);
-    return Math.round(
-      this.state.totalStonesFreed / this.currentTool.totalStonesNeeded * 100
+    return Math.min(
+      Math.round(
+        this.state.totalStonesFreed / this.currentTool.totalStonesNeeded * 100
+      ),
+      100
     );
   }
 
@@ -416,6 +423,7 @@ class App extends React.Component<{}, AppState> {
   }
 
   public onFree() {
+    this.lastFreedTime = Date.now();
     this.points += this.pointsPerClick;
     this.tintBannerPoints();
   }
@@ -501,7 +509,7 @@ class App extends React.Component<{}, AppState> {
                         count={this.protestersOfLevel(protester.level)}
                         name={protester.name}
                         description={`Frees ${numberWithCommas(
-                          protester.rate
+                          this.adjustedProtesterRate(protester)
                         )} stones/sec`}
                         cost={this.adjustedProtesterCost(protester)}
                         verb={"HIRE"}
