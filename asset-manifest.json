@@ -1,8 +1,8 @@
 {
   "main.css": "static/css/main.56fa8e1b.css",
   "main.css.map": "static/css/main.56fa8e1b.css.map",
-  "main.js": "static/js/main.588656d5.js",
-  "main.js.map": "static/js/main.588656d5.js.map",
+  "main.js": "static/js/main.81c335a1.js",
+  "main.js.map": "static/js/main.81c335a1.js.map",
   "static/media/112.png": "static/media/112.3dac44ae.png",
   "static/media/AEPi-brother.png": "static/media/AEPi-brother.fba9ab33.png",
   "static/media/brain.png": "static/media/brain.e30e8cae.png",
@@ -10,6 +10,7 @@
   "static/media/campus.svg": "static/media/campus.5f620837.svg",
   "static/media/campuses.png": "static/media/campuses.d29867a8.png",
   "static/media/cursor.png": "static/media/cursor.469e59be.png",
+  "static/media/diamond-pickaxe-enchanted.png": "static/media/diamond-pickaxe-enchanted.7f1bc2f2.png",
   "static/media/first-year.png": "static/media/first-year.eda7ebd0.png",
   "static/media/free-mason.png": "static/media/free-mason.e69d72a0.png",
   "static/media/free-stone.png": "static/media/free-stone.22900649.png",
