@@ -189,6 +189,41 @@ body {
   border-radius: 3px;
 }
 
+@keyframes shake {
+  0% {
+    transform: translateX(-3px);
+    transform: translateY(1px);
+  }
+  /* 50% {
+    translateX(-px);
+  } */
+  100% {
+    transform: translateX(3px);
+  }
+}
+
+.ToolBoxContainer.SuperSubra .ToolBox {
+  border-color: gold;
+}
+
+.ToolBoxContainer.SuperSubra .ToolBox-image {
+  animation: shake 0.05s infinite alternate;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+    opacity: 1;
+  }
+}
+
+.ToolBoxContainer.FinalTool .ToolBox-image {
+  animation: spin 5s infinite linear;
+}
+
 /* .ToolBox-upgrade-icon {
   margin-right: 5px;
 } */
@@ -376,6 +411,14 @@ body {
   background-color: #ffc5c5;
 }
 
+.SectionProtesters .FinalSectionCard {
+  background: radial-gradient(
+    circle,
+    rgba(251, 235, 63, 1) 0%,
+    rgba(255, 41, 84, 1) 100%
+  );
+}
+
 .SectionPublicFigures .SectionCard {
   background-color: #effff3;
 }
@@ -394,9 +437,25 @@ body {
   border-color: #036304;
 }
 
+.SectionPublicFigures .FinalSectionCard {
+  background: radial-gradient(
+    circle,
+    rgb(251, 255, 0) 0%,
+    rgb(8, 189, 14) 100%
+  );
+}
+
 .SectionCampuses .SectionCard-button {
   background-color: #194dd2;
   border-color: #01237a;
+}
+
+.SectionCampuses .FinalSectionCard {
+  background: radial-gradient(
+    circle,
+    rgb(251, 255, 0) 0%,
+    rgb(47, 130, 255) 100%
+  );
 }
 
 .SectionProtesters .SectionGutter {

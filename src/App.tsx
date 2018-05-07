@@ -36,11 +36,12 @@ interface SectionProps {
   doneText?: string;
   isDisabled?: boolean;
   onAction: () => void;
+  isFinal: boolean;
 }
 
 const SectionCard = (props: SectionProps) => {
   return (
-    <div className="SectionCard">
+    <div className={`SectionCard ${props.isFinal ? "FinalSectionCard" : ""}`}>
       <img className="SectionCard-picture" src={props.image} />
       <div className="SectionCard-info">
         {props.count === undefined ? null : (
@@ -265,7 +266,7 @@ class App extends React.Component<{}, AppState> {
     );
     const CMUQatarMultiplier =
       this.state.campuses.indexOf(1) === -1 ? 1 : 1 + numberOfProtesters / 500;
-    const SubroniumMultiplier = this.state.campuses.indexOf(3) === -1 ? 1 : 9;
+    const SubroniumMultiplier = this.state.campuses.indexOf(3) === -1 ? 1 : 8;
     return (
       this.currentTool.rate *
       this.publicFigureScaleFactor(true) *
@@ -279,22 +280,13 @@ class App extends React.Component<{}, AppState> {
   }
 
   get availablePublicFigures() {
-    if (this.currentTool.level < 3) {
-      return [];
-    }
     return publicFigures.filter(
-      publicFigure =>
-        this.state.totalStonesFreed >= 0.5 * publicFigure.totalStonesNeeded
+      publicFigure => publicFigure.minLevel <= this.state.toolLevel
     );
   }
 
   get availableCampuses() {
-    if (this.currentTool.level < 5) {
-      return [];
-    }
-    return campuses.filter(
-      campus => this.state.totalStonesFreed >= 0.5 * campus.totalStonesNeeded
-    );
+    return campuses.filter(campus => campus.minLevel <= this.state.toolLevel);
   }
 
   public protestersOfLevel(level: number) {
@@ -335,11 +327,8 @@ class App extends React.Component<{}, AppState> {
     //   }
     //   return 0;
     // }, 0);
-    return Math.min(
-      Math.round(
-        this.state.totalStonesFreed / this.currentTool.totalStonesNeeded * 100
-      ),
-      100
+    return Math.round(
+      this.state.totalStonesFreed / this.currentTool.totalStonesNeeded * 100
     );
   }
 
@@ -357,7 +346,7 @@ class App extends React.Component<{}, AppState> {
     const CMUSiliconValleyMultiplier =
       this.state.campuses.indexOf(0) !== -1 ? 2 : 1;
     const CentralMichiganMultiplier =
-      this.state.campuses.indexOf(2) !== -1 ? 4 : 1;
+      this.state.campuses.indexOf(2) !== -1 ? 2.5 : 1;
     return (
       protester.rate * CMUSiliconValleyMultiplier * CentralMichiganMultiplier
     );
@@ -461,7 +450,13 @@ class App extends React.Component<{}, AppState> {
               style={{ cursor: `url(${this.currentTool.cursor}) 0 0, pointer` }}
               onTouchEnd={this.onStoneTapped}
             />
-            <div className="ToolBoxContainer">
+            <div
+              className={`ToolBoxContainer ${
+                this.state.campuses.indexOf(3) !== -1 ? "SuperSubra" : ""
+              } ${
+                this.currentTool.level === tools.length - 1 ? "FinalTool" : ""
+              }`}
+            >
               <div className="ToolBox">
                 <div className="ToolBox-name">{this.currentTool.name}</div>
                 <div className="ToolBox-description">
@@ -483,7 +478,9 @@ class App extends React.Component<{}, AppState> {
                   </div>
                   <div
                     className="ToolBox-upgrade-bar"
-                    style={{ width: `${this.toolUpgradePercent}%` }}
+                    style={{
+                      width: `${Math.min(100, this.toolUpgradePercent)}%`
+                    }}
                   />
                 </div>
               )}
@@ -513,6 +510,7 @@ class App extends React.Component<{}, AppState> {
                     .reverse()
                     .map(protester => (
                       <SectionCard
+                        isFinal={protester.level === protesters.length - 1}
                         count={this.protestersOfLevel(protester.level)}
                         name={protester.name}
                         description={`Frees ${numberWithCommas(
@@ -547,6 +545,9 @@ class App extends React.Component<{}, AppState> {
                     .reverse()
                     .map(publicFigure => (
                       <SectionCard
+                        isFinal={
+                          publicFigure.level === publicFigures.length - 1
+                        }
                         name={publicFigure.name}
                         description={publicFigure.description}
                         cost={publicFigure.cost}
@@ -581,6 +582,7 @@ class App extends React.Component<{}, AppState> {
                     .reverse()
                     .map(campus => (
                       <SectionCard
+                        isFinal={campus.level === campuses.length - 1}
                         name={campus.name}
                         description={campus.description}
                         cost={campus.cost}
